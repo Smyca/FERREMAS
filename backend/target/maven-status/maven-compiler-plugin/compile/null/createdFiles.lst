@@ -1,0 +1,4 @@
+com/ferremas/repository/MensajeRepository.class
+com/ferremas/service/MensajeService.class
+com/ferremas/controller/MensajeResource.class
+com/ferremas/model/Mensaje.class
