@@ -1,4 +1,5 @@
-com/ferremas/repository/MensajeRepository.class
-com/ferremas/service/MensajeService.class
-com/ferremas/controller/MensajeResource.class
-com/ferremas/model/Mensaje.class
+Services/ProductoService.class
+Controller/ProductResource.class
+Model/Producto$.class
+Repository/ProductoRepository.class
+Model/Producto.class
