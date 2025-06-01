@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FERREMAS - Sistema de Gestión</title>
+  <link rel="stylesheet" href="producto.component.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🔧 FERREMAS</h1>
+      <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <h3>Acciones Rápidas</h3>
+      <div class="button-group">
+        <button class="btn btn-success" onclick="openCreateModal()">➕ Nuevo Producto</button>
+        <button class="btn btn-primary" onclick="loadProducts()">🔄 Actualizar</button>
+        <button class="btn btn-warning" onclick="searchStockBajo()">⚠️ Stock Bajo</button>
+      </div>
+
+      <div class="search-container">
+        <input type="text" class="search-input" id="searchInput"
+          placeholder="Buscar productos por nombre, marca o categoría...">
+        <button class="btn btn-primary" onclick="searchProducts()">🔍 Buscar</button>
+        <select class="search-input" id="categoryFilter" onchange="filterByCategory()">
+          <option value="">Todas las categorías</option>
+          <option value="Herramientas Eléctricas">Herramientas Eléctricas</option>
+          <option value="Herramientas Manuales">Herramientas Manuales</option>
+          <option value="Materiales Básicos">Materiales Básicos</option>
+          <option value="Acabados">Acabados</option>
+          <option value="Equipos de Seguridad">Equipos de Seguridad</option>
+          <option value="Tornillos y Anclajes">Tornillos y Anclajes</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Products Container -->
+    <div class="products-container">
+      <div class="products-header">
+        <h3>Productos Disponibles</h3>
+        <div id="productCount">Cargando...</div>
+        
+
+      </div>
+      <div id="productsGrid" class="products-grid">
+        <!-- <div class="loading">Cargando productos...</div> -->
+        <mat-card appearance="outlined">
+            <mat-card-header>TITULO</mat-card-header>
+          <mat-card-content>Simple card</mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Crear/Editar Producto -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle">Nuevo Producto</h2>
+      <form id="productForm">
+        <div class="form-group">
+          <label for="codigoProducto">Código del Producto</label>
+          <input type="text" id="codigoProducto" name="codigoProducto" required>
+        </div>
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="marca">Marca</label>
+          <input type="text" id="marca" name="marca" required>
+        </div>
+        <div class="form-group">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" name="categoria" required>
+            <option value="">Seleccionar categoría</option>
+            <option value="Herramientas Eléctricas">Herramientas Eléctricas</option>
+            <option value="Herramientas Manuales">Herramientas Manuales</option>
+            <option value="Materiales Básicos">Materiales Básicos</option>
+            <option value="Acabados">Acabados</option>
+            <option value="Equipos de Seguridad">Equipos de Seguridad</option>
+            <option value="Tornillos y Anclajes">Tornillos y Anclajes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="precio">Precio</label>
+          <input type="number" id="precio" name="precio" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="stock">Stock</label>
+          <input type="number" id="stock" name="stock" required>
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-success">💾 Guardar</button>
+          <button type="button" class="btn btn-danger" onclick="closeModal()">❌ Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
