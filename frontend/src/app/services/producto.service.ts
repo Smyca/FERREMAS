@@ -26,11 +26,9 @@ export class ProductoService {
     return this.http.get<Producto[]>(this.apiUrl);
   }
 
-  getProducto(codigo: string): Observable<Producto> {
-    return this.http.get<Producto>(`${this.apiUrl}/${codigo}`);
-  }
-
   agregarProducto(producto: Producto): Observable<Producto> {
+    console.log('Enviando POST a:', this.apiUrl);
+    console.log('Datos enviados:', producto);
     return this.http.post<Producto>(this.apiUrl, producto);
   }
 

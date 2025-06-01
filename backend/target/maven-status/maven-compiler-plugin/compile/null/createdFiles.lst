@@ -1,5 +1,5 @@
-Services/ProductoService.class
-Controller/ProductResource.class
-Model/Producto$.class
-Repository/ProductoRepository.class
-Model/Producto.class
+Services\ProductoService.class
+Model\Producto.class
+Model\Producto$.class
+Repository\ProductoRepository.class
+Controller\ProductResource.class
