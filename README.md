@@ -19,6 +19,14 @@ CREATE TABLE productos (
     fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+
+
 -- Datos de ejemplo para FERREMAS
 INSERT INTO productos (codigo_producto, nombre, descripcion, marca, categoria, precio, stock, fecha_creacion, fecha_actualizacion) VALUES
 ('FER-001', 'Taladro Percutor 600W', 'Taladro percutor con cable de 600W, ideal para concreto y mampostería', 'Bosch', 'Herramientas Eléctricas', 89990.99, 15, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -29,3 +37,9 @@ INSERT INTO productos (codigo_producto, nombre, descripcion, marca, categoria, p
 ('FER-006', 'Casco de Seguridad', 'Casco de seguridad industrial con barboquejo ajustable', '3M', 'Equipos de Seguridad', 15000.00, 50, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('FER-007', 'Destornillador Phillips #2', 'Destornillador Phillips número 2, mango ergonómico', 'Stanley', 'Herramientas Manuales', 3500.00, 40, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('FER-008', 'Tornillos Autorroscantes x100', 'Caja de 100 tornillos autorroscantes 6x25mm', 'Hilti', 'Tornillos y Anclajes', 2800.00, 75, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+
+-- Datos de ejemplo para usuario en login
+INSERT INTO usuarios (username, password)
+VALUES ('usuario', 'password');

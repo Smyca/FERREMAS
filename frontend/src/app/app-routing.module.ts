@@ -4,7 +4,7 @@ import { ProductoComponent } from './components/producto/producto.component';
 import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
-  {path:'',redirectTo:'productos',pathMatch:'full'},
+  {path:'',redirectTo:'login',pathMatch:'full'},
   {path:'productos', component:ProductoComponent},
   {path:'login',component:LoginComponent}
 ];
