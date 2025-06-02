@@ -14,14 +14,22 @@
     <div class="header">
       <h1>🔧 FERREMAS</h1>
       <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
-    </div>
-
-    <!-- Controls -->
+    </div>    <!-- Controls -->
     <div class="controls">
-      <h3>Acciones Rápidas</h3>
-      <div class="button-group">
-        <button class="btn btn-success" (click)="abrirModalCrear()">➕ Nuevo Producto</button>
-      </div>      <div class="search-container">
+      <div class="controls-header">
+        <div class="actions-section">
+          <h3>Acciones Rápidas</h3>
+          <div class="button-group">
+            <button class="btn btn-success" (click)="abrirModalCrear()">➕ Nuevo Producto</button>
+          </div>
+        </div>
+        <div class="currency-selector">
+          <label for="moneda">💰 Mostrar precios en:</label>
+          <select id="moneda" [(ngModel)]="monedaSeleccionada" (change)="cambiarMoneda()" class="currency-select">
+            <option *ngFor="let m of monedasDisponibles" [value]="m">{{ m }}</option>
+          </select>
+        </div>
+      </div><div class="search-container">
         <input type="text" class="search-input" [(ngModel)]="searchTerm" 
           (keyup)="searchProducts()"
           placeholder="Buscar productos por nombre, marca o categoría...">
@@ -142,15 +150,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Selector de Moneda -->
-  <div class="currency-selector">
-    <label for="moneda">Seleccionar Moneda:</label>
-    <select [(ngModel)]="monedaSeleccionada" (change)="cambiarMoneda()">
-      <option *ngFor="let m of monedasDisponibles" [value]="m">{{ m }}</option>
-    </select>
-  </div>
-
   <!-- PayPal Button Container -->
   <div class="paypal-button-container" style="margin: 20px auto; max-width: 500px; padding: 20px;">
     <h3>Prueba de Pago con PayPal</h3>

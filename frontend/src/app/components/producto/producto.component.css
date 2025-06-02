@@ -48,6 +48,55 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .actions-section {
+            flex: 1;
+        }
+
+        .currency-selector {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 12px 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .currency-selector label {
+            color: #2c3e50;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .currency-select {
+            padding: 8px 15px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background: white;
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .currency-select:hover {
+            border-color: #2980b9;
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+        }
+
+        .currency-select:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
         .controls h3 {
             color: #2c3e50;
             margin-bottom: 20px;

@@ -17,7 +17,7 @@ export class ProductoComponent implements OnInit, AfterViewInit {
 
   // Propiedades para el manejo de monedas
   monedasDisponibles: string[] = ['MXN', 'USD', 'EUR', 'CLP'];
-  monedaSeleccionada: string = 'MXN';
+  monedaSeleccionada: string = 'CLP';
   tasaConversion: number = 1;
 
   // Propiedades para modales
@@ -65,16 +65,34 @@ export class ProductoComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
   cambiarMoneda() {
-    if (this.monedaSeleccionada === 'MXN') {
+    if (this.monedaSeleccionada === 'CLP') {
       this.tasaConversion = 1;
       return;
     }
-    // Usando exchangerate.host (gratis y sin API key)
-    this.http.get<any>(`https://api.exchangerate.host/latest?base=MXN&symbols=${this.monedaSeleccionada}`)
-      .subscribe(data => {
-        this.tasaConversion = data.rates[this.monedaSeleccionada];
+
+    // Obtener tasas actualizadas de la API
+    console.log('Consultando API de tipos de cambio...');
+    this.http.get<any>('https://open.er-api.com/v6/latest/CLP')
+      .subscribe({
+        next: (data) => {
+          if (data && data.rates && data.rates[this.monedaSeleccionada]) {
+            this.tasaConversion = data.rates[this.monedaSeleccionada];
+            console.log('✅ API de tipos de cambio funcionando correctamente');
+            console.log(`💱 Tasa de cambio para ${this.monedaSeleccionada}:`, this.tasaConversion);
+            console.log('📊 Tasas disponibles:', data.rates);
+          } else {
+            console.warn('⚠️ No se encontró la tasa para', this.monedaSeleccionada);
+            console.log('Respuesta de la API:', data);
+            this.tasaConversion = 1; // Valor por defecto si no se encuentra la tasa
+          }
+        },
+        error: (error) => {
+          console.error('❌ Error al consultar la API de tipos de cambio:');
+          console.error('Código de error:', error.status);
+          console.error('Mensaje:', error.message);
+          this.tasaConversion = 1; // Valor por defecto en caso de error
+        }
       });
   }
 
@@ -202,19 +220,18 @@ export class ProductoComponent implements OnInit, AfterViewInit {
     if (stock < 5) return 'Poco stock';
     return 'En stock';
   }
-
   formatNumber(value: number): string {
     try {
-      const convertido = value * this.tasaConversion;
-      // Usar 'es' como locale base y personalizar el formato
+      const convertido = Math.round(value * this.tasaConversion);
+      // Usar 'es' como locale base y formatear como entero
       return new Intl.NumberFormat('es-ES', {
         style: 'decimal',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
       }).format(convertido);
     } catch (error) {
       console.error('Error al formatear número:', error);
-      return value.toString(); // Retornar el valor sin formato en caso de error
+      return Math.round(value).toString(); // Retornar el valor redondeado sin formato en caso de error
     }
   }
 
