@@ -21,13 +21,11 @@
       <h3>Acciones Rápidas</h3>
       <div class="button-group">
         <button class="btn btn-success" (click)="abrirModalCrear()">➕ Nuevo Producto</button>
-      </div>
-
-      <div class="search-container">
-        <input type="text" class="search-input" id="searchInput"
+      </div>      <div class="search-container">
+        <input type="text" class="search-input" [(ngModel)]="searchTerm" 
+          (keyup)="searchProducts()"
           placeholder="Buscar productos por nombre, marca o categoría...">
-        <button class="btn btn-primary" onclick="searchProducts()">🔍 Buscar</button>
-        <select class="search-input" id="categoryFilter" onchange="filterByCategory()">
+        <select class="search-input" [(ngModel)]="selectedCategory" (change)="searchProducts()">
           <option value="">Todas las categorías</option>
           <option value="Herramientas Eléctricas">Herramientas Eléctricas</option>
           <option value="Herramientas Manuales">Herramientas Manuales</option>
@@ -43,15 +41,14 @@
     <div class="products-container">
       <div class="products-header">
         <h3>Productos Disponibles</h3>
-      </div>      <div id="productsGrid" class="products-grid">
-        <ng-container *ngIf="productos.length === 0">
+      </div>      <div id="productsGrid" class="products-grid">        <ng-container *ngIf="productosFiltrados.length === 0">
           <div style="text-align: center; padding: 40px; color: #7f8c8d;">
             No se encontraron productos
           </div>
         </ng-container>
         
-        <ng-container *ngIf="productos.length > 0">
-          <div *ngFor="let product of productos" class="product-card">
+        <ng-container *ngIf="productosFiltrados.length > 0">
+          <div *ngFor="let product of productosFiltrados" class="product-card">
             <div class="product-header">
               <div class="product-code">{{ product.codigoProducto }}</div>
               <div [class]="'product-stock ' + getStockClass(product.stock)">
@@ -152,6 +149,13 @@
     <select [(ngModel)]="monedaSeleccionada" (change)="cambiarMoneda()">
       <option *ngFor="let m of monedasDisponibles" [value]="m">{{ m }}</option>
     </select>
+  </div>
+
+  <!-- PayPal Button Container -->
+  <div class="paypal-button-container" style="margin: 20px auto; max-width: 500px; padding: 20px;">
+    <h3>Prueba de Pago con PayPal</h3>
+    <p>Monto de prueba: $10.00 USD</p>
+    <div #paypalElement></div>
   </div>
 </body>
 

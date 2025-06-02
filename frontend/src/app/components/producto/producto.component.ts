@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ProductoService, Producto } from '../../services/producto.service';
 
@@ -6,11 +6,12 @@ import { ProductoService, Producto } from '../../services/producto.service';
   selector: 'app-productos',
   templateUrl: './producto.component.html',
 })
-export class ProductoComponent implements OnInit {
+export class ProductoComponent implements OnInit, AfterViewInit {
   // =====================================
   // Propiedades del componente
   // =====================================
   productos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
   productoNuevo: Producto = this.resetProducto();
   productoSeleccionado: Producto = this.resetProducto();
 
@@ -25,7 +26,12 @@ export class ProductoComponent implements OnInit {
   modalConfirmacionVisible = false;
   productoAEliminar: Producto | null = null;
 
+  // Propiedades para búsqueda
+  searchTerm: string = '';
+  selectedCategory: string = '';
+
   @ViewChild('editarProductoModal') editarProductoModal!: ElementRef;
+  @ViewChild('paypalElement') paypalElement!: ElementRef;
 
   // =====================================
   // Constructor e inicialización
@@ -37,6 +43,10 @@ export class ProductoComponent implements OnInit {
     this.cambiarMoneda();
   }
 
+  ngAfterViewInit(): void {
+    this.initPayPalButton();
+  }
+
   // =====================================
   // Métodos de carga de datos
   // =====================================
@@ -45,10 +55,13 @@ export class ProductoComponent implements OnInit {
       next: (data) => {
         console.log('Productos cargados:', data);
         this.productos = data;
+        this.productosFiltrados = [...this.productos]; // Inicializar productos filtrados
+        this.searchProducts(); // Aplicar filtros si existen
       },
       error: (error) => {
         console.error('Error al cargar productos:', error);
         this.productos = [];
+        this.productosFiltrados = [];
       }
     });
   }
@@ -205,6 +218,41 @@ export class ProductoComponent implements OnInit {
     }
   }
 
+  private initPayPalButton(): void {
+    if (!this.paypalElement || !this.paypalElement.nativeElement) {
+      console.error('PayPal element not found');
+      return;
+    }
+
+    const paypal = (window as any).paypal;
+    if (!paypal) {
+      console.error('PayPal SDK not loaded');
+      return;
+    }
+
+    paypal.Buttons({
+      createOrder: (data: any, actions: any) => {
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '10.00' // Monto fijo de $10 USD
+            }
+          }]
+        });
+      },
+      onApprove: (data: any, actions: any) => {
+        return actions.order.capture().then((details: any) => {
+          console.log('Transaction completed by', details.payer.name.given_name);
+          alert('Pago completado! Gracias ' + details.payer.name.given_name);
+        });
+      },
+      onError: (err: any) => {
+        console.error('PayPal Error:', err);
+        alert('Hubo un error al procesar el pago. Por favor, intente nuevamente.');
+      }
+    }).render(this.paypalElement.nativeElement);
+  }
+
   // =====================================
   // Métodos de acceso desde HTML
   // =====================================
@@ -229,5 +277,41 @@ export class ProductoComponent implements OnInit {
     if (producto) {
       this.eliminarProducto(producto);
     }
+  }
+
+  // =====================================
+  // Métodos de búsqueda
+  // =====================================
+  searchProducts(): void {
+    // Si no hay productos, no hacer nada
+    if (!this.productos) {
+      this.productosFiltrados = [];
+      return;
+    }
+
+    // Comenzar con todos los productos
+    let results = [...this.productos];
+
+    // Aplicar filtro de búsqueda si hay término de búsqueda
+    if (this.searchTerm.trim()) {
+      const searchTermLower = this.searchTerm.toLowerCase().trim();
+      results = results.filter(product =>
+        product.nombre.toLowerCase().includes(searchTermLower) ||
+        product.marca.toLowerCase().includes(searchTermLower) ||
+        product.descripcion?.toLowerCase().includes(searchTermLower) ||
+        product.codigoProducto.toLowerCase().includes(searchTermLower)
+      );
+    }
+
+    // Aplicar filtro de categoría si hay una seleccionada
+    if (this.selectedCategory) {
+      results = results.filter(product => 
+        product.categoria === this.selectedCategory
+      );
+    }
+
+    // Actualizar productos filtrados
+    this.productosFiltrados = results;
+    console.log('Productos filtrados:', this.productosFiltrados.length);
   }
 }
