@@ -41,8 +41,15 @@ export class ProductoComponent implements OnInit {
   // Métodos de carga de datos
   // =====================================
   cargarProductos(): void {
-    this.productoService.getProductos().subscribe((data) => {
-      this.productos = data;
+    this.productoService.getProductos().subscribe({
+      next: (data) => {
+        console.log('Productos cargados:', data);
+        this.productos = data;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error);
+        this.productos = [];
+      }
     });
   }
 
@@ -84,9 +91,6 @@ export class ProductoComponent implements OnInit {
   guardarProducto(): void {
     if (!this.productoSeleccionado) return;
 
-    console.log('Datos del producto antes de enviar:', this.productoSeleccionado);
-
-    // Crear el objeto producto con los datos del formulario
     const productoParaEnviar = {
       codigoProducto: this.productoSeleccionado.codigoProducto,
       nombre: this.productoSeleccionado.nombre,
@@ -97,26 +101,45 @@ export class ProductoComponent implements OnInit {
       stock: Number(this.productoSeleccionado.stock)
     };
 
-    console.log('Producto preparado para enviar:', productoParaEnviar);
+    console.log('Operación:', this.modalTitle);
+    console.log('Producto a enviar:', productoParaEnviar);
 
-    // Siempre usar el método agregarProducto para crear un nuevo producto
-    this.productoService.agregarProducto(productoParaEnviar).subscribe({
-      next: (response) => {
-        console.log('Respuesta exitosa:', response);
-        this.cargarProductos();
-        this.cerrarModal();
-      },
-      error: (error) => {
-        console.error('Error completo:', error);
-        if (error.status === 404) {
-          alert('Error en la URL del servidor. Contacte al administrador.');
-        } else if (error.status === 409) {
-          alert('Ya existe un producto con este código.');
-        } else {
-          alert('Error al crear el producto: ' + error.message);
+    // Verificar si estamos creando o editando según el título del modal
+    if (this.modalTitle === 'Nuevo Producto') {
+      // Crear nuevo producto
+      this.productoService.agregarProducto(productoParaEnviar).subscribe({
+        next: (response) => {
+          console.log('Producto creado:', response);
+          this.cargarProductos();
+          this.cerrarModal();
+        },
+        error: (error) => {
+          console.error('Error al crear:', error);
+          if (error.status === 409) {
+            alert('Ya existe un producto con este código.');
+          } else {
+            alert('Error al crear el producto: ' + error.message);
+          }
         }
-      }
-    });
+      });
+    } else {
+      // Actualizar producto existente
+      this.productoService.actualizarProducto(productoParaEnviar.codigoProducto, productoParaEnviar).subscribe({
+        next: (response) => {
+          console.log('Producto actualizado:', response);
+          this.cargarProductos();
+          this.cerrarModal();
+        },
+        error: (error) => {
+          console.error('Error al actualizar:', error);
+          if (error.status === 404) {
+            alert('No se encontró el producto para actualizar.');
+          } else {
+            alert('Error al actualizar el producto: ' + error.message);
+          }
+        }
+      });
+    }
   }
 
   eliminarProducto(producto: Producto): void {
@@ -168,8 +191,18 @@ export class ProductoComponent implements OnInit {
   }
 
   formatNumber(value: number): string {
-    const convertido = value * this.tasaConversion;
-    return convertido.toLocaleString('es-MX', { minimumFractionDigits: 2 });
+    try {
+      const convertido = value * this.tasaConversion;
+      // Usar 'es' como locale base y personalizar el formato
+      return new Intl.NumberFormat('es-ES', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(convertido);
+    } catch (error) {
+      console.error('Error al formatear número:', error);
+      return value.toString(); // Retornar el valor sin formato en caso de error
+    }
   }
 
   // =====================================

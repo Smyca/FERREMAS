@@ -43,32 +43,36 @@
     <div class="products-container">
       <div class="products-header">
         <h3>Productos Disponibles</h3>
-      </div>
-      <div id="productsGrid" class="products-grid">
-        <!-- <div class="loading">Cargando productos...</div> -->
-        <div *ngIf="productos.length === 0" style="text-align: center; padding: 40px; color: #7f8c8d;">
-          No se encontraron productos
-        </div>
-        <div *ngFor="let product of productos" class="product-card">
-          <div class="product-header">
-            <div class="product-code">{{ product.codigoProducto }}</div>
-            <div class="product-stock {{ getStockClass(product.stock) }}">{{ getStockText(product.stock) }}</div>
+      </div>      <div id="productsGrid" class="products-grid">
+        <ng-container *ngIf="productos.length === 0">
+          <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+            No se encontraron productos
           </div>
-          <div class="product-name">{{ product.nombre }}</div>
-          <div class="product-brand">📦 {{ product.marca }}</div>
-          <div class="product-category">{{ product.categoria }}</div>
-          <div class="product-description">{{ product.descripcion || 'Sin descripción' }}</div>
-          <div class="product-footer">
-            <div class="product-price">
-              {{ formatNumber(product.precio) }} {{ monedaSeleccionada }}
+        </ng-container>
+        
+        <ng-container *ngIf="productos.length > 0">
+          <div *ngFor="let product of productos" class="product-card">
+            <div class="product-header">
+              <div class="product-code">{{ product.codigoProducto }}</div>
+              <div [class]="'product-stock ' + getStockClass(product.stock)">
+                {{ getStockText(product.stock) }}
+              </div>
             </div>
-            <div class="button-group">
-              <!-- (click)="abrirModalEditar(product)" -->
-              <button class="btn btn-warning" (click)="abrirModalEditar(product)">✏️ Editar</button>
-              <button class="btn btn-danger" (click)="eliminarProducto(product)">🗑️</button>
+            <div class="product-name">{{ product.nombre }}</div>
+            <div class="product-brand">📦 {{ product.marca }}</div>
+            <div class="product-category">{{ product.categoria }}</div>
+            <div class="product-description">{{ product.descripcion || 'Sin descripción' }}</div>
+            <div class="product-footer">
+              <div class="product-price">
+                {{ formatNumber(product.precio) }} {{ monedaSeleccionada }}
+              </div>
+              <div class="button-group">
+                <button class="btn btn-warning" (click)="abrirModalEditar(product)">✏️ Editar</button>
+                <button class="btn btn-danger" (click)="eliminarProducto(product)">🗑️</button>
+              </div>
             </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>
