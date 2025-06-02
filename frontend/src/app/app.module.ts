@@ -8,11 +8,13 @@ import { ProductoComponent } from './components/producto/producto.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProductoComponent
+    ProductoComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

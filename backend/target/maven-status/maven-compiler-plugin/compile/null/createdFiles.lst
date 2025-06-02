@@ -1,5 +1,6 @@
-Services\ProductoService.class
-Model\Producto.class
-Model\Producto$.class
-Repository\ProductoRepository.class
-Controller\ProductResource.class
+Model/Usuario$.class
+Controller/UserResource$LoginRequest.class
+Repository/UsuarioRepository.class
+Model/Usuario.class
+Controller/UserResource.class
+Controller/UserResource$LoginResponse.class
