@@ -52,13 +52,13 @@ export class ProductoComponent implements OnInit, AfterViewInit {
   // =====================================
   cargarProductos(): void {
     this.productoService.getProductos().subscribe({
-      next: (data) => {
+      next: (data: Producto[]) => {
         console.log('Productos cargados:', data);
         this.productos = data;
         this.productosFiltrados = [...this.productos]; // Inicializar productos filtrados
         this.searchProducts(); // Aplicar filtros si existen
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error al cargar productos:', error);
         this.productos = [];
         this.productosFiltrados = [];
@@ -139,12 +139,12 @@ export class ProductoComponent implements OnInit, AfterViewInit {
     if (this.modalTitle === 'Nuevo Producto') {
       // Crear nuevo producto
       this.productoService.agregarProducto(productoParaEnviar).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           console.log('Producto creado:', response);
           this.cargarProductos();
           this.cerrarModal();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error al crear:', error);
           if (error.status === 409) {
             alert('Ya existe un producto con este código.');
@@ -156,12 +156,12 @@ export class ProductoComponent implements OnInit, AfterViewInit {
     } else {
       // Actualizar producto existente
       this.productoService.actualizarProducto(productoParaEnviar.codigoProducto, productoParaEnviar).subscribe({
-        next: (response) => {
+        next: (response: any) => {
           console.log('Producto actualizado:', response);
           this.cargarProductos();
           this.cerrarModal();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error al actualizar:', error);
           if (error.status === 404) {
             alert('No se encontró el producto para actualizar.');

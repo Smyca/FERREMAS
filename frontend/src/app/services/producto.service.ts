@@ -14,9 +14,7 @@ export interface Producto {
   fechaActualizacion?: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ProductoService {
   private apiUrl = 'http://localhost:8080/productos';
 

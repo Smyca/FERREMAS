@@ -1,7 +1,7 @@
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Controller/ProductResource.java
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Controller/UserResource.java
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Model/Producto.java
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Model/Usuario.java
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Repository/ProductoRepository.java
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Repository/UsuarioRepository.java
-/home/samu/Desktop/ferremas/FERREMAS_v2/backend/src/main/java/Services/ProductoService.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Controller/ProductResource.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Controller/UserResource.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Model/Producto.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Model/Usuario.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Repository/ProductoRepository.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Repository/UsuarioRepository.java
+/home/samu/Desktop/FERREMAS/backend/src/main/java/Services/ProductoService.java
