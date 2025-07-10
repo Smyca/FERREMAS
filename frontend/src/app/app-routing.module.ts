@@ -12,9 +12,7 @@ const routes: Routes = [
     path:'login',
     component: LoginComponent
   },
-  { path: 'gestion-pedidos', loadChildren: () => import('./components/gestion-pedidos/gestion-pedidos.module').then(m => m.GestionPedidosModule) },
-  { path: 'gestion-despachos', loadChildren: () => import('./components/gestion-despachos/gestion-despachos.module').then(m => m.GestionDespachosModule) },
-  { path: 'main', loadChildren: () => import('./components/main/main.module').then(m => m.MainModule) }
+  { path: 'view-vendor', loadChildren: () => import('./components/view-vendor/view-vendor.module').then(m => m.ViewVendorModule) }
 ];
 
 @NgModule({
