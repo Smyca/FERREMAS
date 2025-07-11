@@ -31,7 +31,7 @@ export class LoginComponent {
     this.authService.login(this.username, this.password).subscribe({
       next: (res) => {
         if (res.success) {
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/view-client-products']);
 
           alert('Login correcto');
         }

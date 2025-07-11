@@ -10,6 +10,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: MainVendorComponent }, // Vista por defecto
       { path: 'gestion-pedidos', loadChildren: () => import('../gestion-pedidos/gestion-pedidos.module').then(m => m.GestionPedidosModule) },
+      { path: 'productos', loadChildren: () => import('../producto/producto.module').then(m => m.ProductoModule) },
       { path: 'gestion-despachos', loadChildren: () => import('../gestion-despachos/gestion-despachos.module').then(m => m.GestionDespachosModule) }
     ]
   }

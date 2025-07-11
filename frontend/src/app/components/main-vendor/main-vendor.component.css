@@ -6,7 +6,9 @@
   top: 0;
   transition: all 0.5s ease;
   background: #f4f7fa;
-  padding: 3rem;
+  padding: 2rem;
+  min-height: calc(100vh - 4rem); /* Asegurar altura mínima completa */
+  box-sizing: border-box; /* Incluir padding en el cálculo del ancho */ 
 }
 
 .body-trimmed {
@@ -18,3 +20,4 @@
   width: calc(100% - 5rem);
   margin-left: 5rem;
 }
+

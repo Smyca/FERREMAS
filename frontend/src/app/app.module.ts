@@ -7,17 +7,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductoModule } from './components/producto/producto.module';
 import { LoginModule } from './components/login/login.module';
+import { ViewClientProductsComponent } from './components/view-client-products/view-client-products.component';
+import { FormsModule } from '@angular/forms';
+import { ViewClientProductsModule } from './components/view-client-products/view-client-products.module';
+import { ClientPayComponent } from './components/client-pay/client-pay.component';
+import { ClientPayModule } from './components/client-pay/client-pay.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ProductoModule,
-    LoginModule
+    LoginModule,
+    FormsModule,
+    ClientPayModule
   ],
   providers: [
     provideAnimationsAsync()

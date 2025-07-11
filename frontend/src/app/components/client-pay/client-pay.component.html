@@ -1,0 +1,196 @@
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>🔧 FERREMAS</h1>
+    <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
+  </div>
+
+  <!-- Botón Volver -->
+  <div class="back-button-container">
+    <button class="btn btn-secondary" (click)="goBack()">
+      ← Volver al catálogo
+    </button>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div class="payment-container">
+    <!-- Resumen del Pedido -->
+    <div class="order-summary">
+      <h3>📋 Resumen del Pedido</h3>
+      <div class="order-items">
+        <div *ngFor="let item of cartItems" class="order-item">
+          <div class="item-info">
+            <div class="item-name">{{ item.nombre }}</div>
+            <div class="item-details">{{ item.marca }} - Cantidad: {{ item.quantity }}</div>
+          </div>
+          <div class="item-price">{{ formatNumber(item.precio * item.quantity) }} {{ selectedCurrency }}</div>
+        </div>
+      </div>
+      <div class="order-total">
+        <strong>Total: {{ formatNumber(getTotal()) }} {{ selectedCurrency }}</strong>
+      </div>
+    </div>
+
+    <!-- Formulario de Pago -->
+    <div class="payment-form">
+      <!-- Tipo de Entrega -->
+      <div class="form-section">
+        <h3>🚚 Tipo de Entrega</h3>
+        <div class="delivery-options">
+          <label class="radio-option">
+            <input type="radio" name="delivery" value="pickup" [(ngModel)]="deliveryType">
+            <span class="radio-custom"></span>
+            <div class="option-content">
+              <div class="option-title">🏪 Retiro en Tienda</div>
+              <div class="option-description">Gratis - Retira en nuestra sucursal</div>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="delivery" value="delivery" [(ngModel)]="deliveryType">
+            <span class="radio-custom"></span>
+            <div class="option-content">
+              <div class="option-title">🚚 Despacho a Domicilio</div>
+              <div class="option-description">$5.000 CLP - Entrega en 2-3 días hábiles</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Dirección de Entrega (solo si es despacho) -->
+      <div class="form-section" *ngIf="deliveryType === 'delivery'">
+        <h3>📍 Dirección de Entrega</h3>
+        <div class="form-group">
+          <label for="address">Dirección completa</label>
+          <input type="text" id="address" [(ngModel)]="deliveryAddress" 
+                 placeholder="Ej: Av. Providencia 1234, Depto 56">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">Ciudad</label>
+            <input type="text" id="city" [(ngModel)]="deliveryCity" placeholder="Santiago">
+          </div>
+          <div class="form-group">
+            <label for="region">Región</label>
+            <select id="region" [(ngModel)]="deliveryRegion">
+              <option value="">Seleccionar región</option>
+              <option value="RM">Región Metropolitana</option>
+              <option value="V">Valparaíso</option>
+              <option value="VIII">Biobío</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Métodos de Pago -->
+      <div class="form-section">
+        <h3>💳 Método de Pago</h3>
+        <div class="payment-methods">
+          <label class="radio-option">
+            <input type="radio" name="payment" value="debit" [(ngModel)]="paymentMethod">
+            <span class="radio-custom"></span>
+            <div class="option-content">
+              <div class="option-title">💳 Tarjeta de Débito</div>
+              <div class="option-description">Pago inmediato desde tu cuenta</div>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="payment" value="credit" [(ngModel)]="paymentMethod">
+            <span class="radio-custom"></span>
+            <div class="option-content">
+              <div class="option-title">💳 Tarjeta de Crédito</div>
+              <div class="option-description">Visa, Mastercard, American Express</div>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="payment" value="transfer" [(ngModel)]="paymentMethod">
+            <span class="radio-custom"></span>
+            <div class="option-content">
+              <div class="option-title">🏦 Transferencia Bancaria</div>
+              <div class="option-description">Transferencia electrónica</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Datos de la Tarjeta (solo para débito/crédito) -->
+      <div class="form-section" *ngIf="paymentMethod === 'debit' || paymentMethod === 'credit'">
+        <h3>💳 Datos de la Tarjeta</h3>
+        <div class="form-group">
+          <label for="cardNumber">Número de tarjeta</label>
+          <input type="text" id="cardNumber" [(ngModel)]="cardNumber" 
+                 placeholder="1234 5678 9012 3456" maxlength="19">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expiryDate">Fecha de vencimiento</label>
+            <input type="text" id="expiryDate" [(ngModel)]="expiryDate" 
+                   placeholder="MM/AA" maxlength="5">
+          </div>
+          <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" [(ngModel)]="cvv" 
+                   placeholder="123" maxlength="4">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cardName">Nombre del titular</label>
+          <input type="text" id="cardName" [(ngModel)]="cardName" 
+                 placeholder="Como aparece en la tarjeta">
+        </div>
+      </div>
+
+      <!-- Datos para Transferencia -->
+      <div class="form-section" *ngIf="paymentMethod === 'transfer'">
+        <h3>🏦 Datos para Transferencia</h3>
+        <div class="transfer-info">
+          <div class="info-item">
+            <strong>Banco:</strong> Banco de Chile
+          </div>
+          <div class="info-item">
+            <strong>Cuenta Corriente:</strong> 12345678-9
+          </div>
+          <div class="info-item">
+            <strong>RUT:</strong> 76.123.456-7
+          </div>
+          <div class="info-item">
+            <strong>Email:</strong> pagosferremas.cl
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="transferReference">Número de transferencia</label>
+          <input type="text" id="transferReference" [(ngModel)]="transferReference" 
+                 placeholder="Ingresa el número de transferencia">
+        </div>
+      </div>
+
+      <!-- Total Final -->
+      <div class="final-total">
+        <div class="total-breakdown">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span>{{ formatNumber(getTotal()) }} {{ selectedCurrency }}</span>
+          </div>
+          <div class="total-row" *ngIf="deliveryType === 'delivery'">
+            <span>Envío:</span>
+            <span>{{ formatNumber(5000) }} CLP</span>
+          </div>
+          <div class="total-row final">
+            <span><strong>Total Final:</strong></span>
+            <span><strong>{{ formatNumber(getFinalTotal()) }} {{ selectedCurrency }}</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="action-buttons">
+        <button class="btn btn-success btn-large" (click)="processPayment()" 
+                [disabled]="!isFormValid()">
+          🛒 Confirmar Pedido
+        </button>
+        <button class="btn btn-secondary" (click)="goBack()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

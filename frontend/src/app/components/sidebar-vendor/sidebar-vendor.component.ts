@@ -15,7 +15,7 @@ export class SidebarVendorComponent {
       label: 'Dashboard'
     },
     {
-      routeLink: '/productos',
+      routeLink: '/view-vendor/main-vendor/productos',
       icon: 'fal fa-box',
       label: 'Productos'
     },
