@@ -7,11 +7,11 @@
 
 /* Header Section */
 .header-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
   border-radius: 20px;
   padding: 2.5rem;
   color: white;
-  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 35px rgba(78, 205, 196, 0.3);
   margin-bottom: 2.5rem !important;
 }
 
@@ -42,12 +42,12 @@
 }
 
 .stat-number {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 800;
 }
 
 .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   opacity: 0.8;
 }
 
@@ -83,9 +83,27 @@
 }
 
 .modern-select:focus, .modern-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+  border-color: #4ecdc4;
+  box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.15);
   background: #ffffff;
+}
+
+.vendedores-disponibles {
+  text-align: center;
+}
+
+.vendedores-count {
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #4ecdc4;
+}
+
+.count-badge {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #059669;
+  display: block;
 }
 
 /* Table Styling */
@@ -122,15 +140,14 @@
 }
 
 /* Ancho específico para cada columna */
-.table-header th:nth-child(1) { width: 6%; }  /* ID */
-.table-header th:nth-child(2) { width: 18%; } /* Cliente */
-.table-header th:nth-child(3) { width: 12%; } /* Vendedor */
-.table-header th:nth-child(4) { width: 10%; } /* Fechas */
-.table-header th:nth-child(5) { width: 11%; } /* Estado */
-.table-header th:nth-child(6) { width: 9%; }  /* Prioridad */
-.table-header th:nth-child(7) { width: 10%; } /* Productos */
-.table-header th:nth-child(8) { width: 10%; } /* Total */
-.table-header th:nth-child(9) { width: 14%; } /* Acciones */
+.table-header th:nth-child(1) { width: 8%; }  /* ID */
+.table-header th:nth-child(2) { width: 22%; } /* Cliente */
+.table-header th:nth-child(3) { width: 12%; } /* Fechas */
+.table-header th:nth-child(4) { width: 12%; } /* Estado */
+.table-header th:nth-child(5) { width: 10%; } /* Prioridad */
+.table-header th:nth-child(6) { width: 15%; } /* Vendedor */
+.table-header th:nth-child(7) { width: 12%; } /* Total */
+.table-header th:nth-child(8) { width: 9%; }  /* Acciones */
 
 .table-row {
   transition: all 0.3s ease;
@@ -147,7 +164,7 @@
 
 .selected-row {
   background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%) !important;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #4ecdc4;
 }
 
 .table-row td {
@@ -165,13 +182,13 @@
 }
 
 .id-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
   color: white;
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.8rem;
-  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 3px 8px rgba(78, 205, 196, 0.3);
   display: inline-block;
 }
 
@@ -189,20 +206,10 @@
   line-height: 1.2;
 }
 
-.contact-info {
+.productos-count, .telefono-info {
   font-size: 0.75rem;
   color: #64748b;
   font-weight: 500;
-}
-
-.vendedor-badge {
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-  color: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: inline-block;
 }
 
 .fechas-info {
@@ -212,14 +219,14 @@
   font-size: 0.8rem;
 }
 
-.fecha-pedido, .fecha-limite {
+.fecha-preparacion, .fecha-entrega {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
 }
 
-.fecha-limite {
+.fecha-entrega {
   font-weight: 600;
 }
 
@@ -250,23 +257,23 @@
   font-size: 0.5rem;
 }
 
-.badge-pending {
-  background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
-  color: white;
-}
-
-.badge-approved {
+.badge-ready {
   background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
   color: white;
 }
 
-.badge-rejected {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+.badge-assigned {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
   color: white;
 }
 
-.badge-preparing {
-  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+.badge-picked {
+  background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+  color: white;
+}
+
+.badge-transit {
+  background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
   color: white;
 }
 
@@ -302,20 +309,19 @@
   animation: pulse 2s infinite;
 }
 
-.productos-summary {
+/* Vendedor Info */
+.vendedor-info {
   font-size: 0.85rem;
-  text-align: center;
 }
 
-.productos-count {
-  color: #2c3e50;
+.vendedor-asignado {
+  color: #059669;
   font-weight: 600;
-  margin-bottom: 0.2rem;
 }
 
-.productos-tipos {
+.sin-vendedor {
   color: #64748b;
-  font-size: 0.75rem;
+  font-style: italic;
 }
 
 .total-amount {
@@ -328,82 +334,81 @@
 .action-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.2rem;
   align-items: center;
 }
 
-.pending-actions {
+.btn-assign {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  border: none;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(78, 205, 196, 0.3);
+  width: auto;
+  min-width: 80px;
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  align-items: center;
+  gap: 0.3rem;
+  justify-content: space-between;
 }
 
-.btn-approve {
-  background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+.btn-assign:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
+}
+
+.btn-pickup {
+  background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
   border: none;
   color: white;
-  padding: 0.3rem 0.6rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 8px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 184, 148, 0.3);
-  width: 70px;
+  box-shadow: 0 2px 6px rgba(253, 203, 110, 0.3);
+  width: 80px;
 }
 
-.btn-approve:hover {
+.btn-pickup:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 184, 148, 0.4);
-}
-
-.btn-reject {
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-  border: none;
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 8px;
-  font-size: 0.7rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
-  width: 70px;
-}
-
-.btn-reject:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
-}
-
-.btn-prepare {
-  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-  border: none;
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 8px;
-  font-size: 0.7rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(116, 185, 255, 0.3);
-  width: 70px;
-}
-
-.btn-prepare:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(116, 185, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(253, 203, 110, 0.4);
 }
 
 .btn-details {
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   border: none;
   color: #2c3e50;
-  padding: 0.3rem 0.6rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 8px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(168, 237, 234, 0.3);
-  width: 50px;
+  width: 60px;
 }
 
 .btn-details:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(168, 237, 234, 0.4);
+}
+
+/* Dropdown styling */
+.dropdown-menu {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.vendedor-option {
+  padding: 0.5rem 0;
+}
+
+.vendedor-option strong {
+  color: #2c3e50;
 }
 
 /* Details Panel */
@@ -433,7 +438,7 @@
 }
 
 .details-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
   color: white;
   padding: 2rem;
   display: flex;
@@ -471,22 +476,13 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
-.email-link, .phone-link {
-  color: #667eea;
-  text-decoration: none;
-}
-
-.email-link:hover, .phone-link:hover {
-  text-decoration: underline;
-}
-
-.observaciones {
-  background: #f8f9fa;
-  padding: 1rem;
-  border-radius: 8px;
-  border-left: 4px solid #667eea;
-  margin-top: 0.5rem;
-  font-style: italic;
+.vendedor-badge {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 /* Products List */
@@ -503,22 +499,18 @@
   background: #ffffff;
   border-radius: 12px;
   transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
+  border: 2px solid #4ecdc4;
   box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
 
-.producto-numero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.8rem;
+.producto-preparado {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.15);
+}
+
+.producto-check {
   margin-right: 1rem;
+  font-size: 1.2rem;
 }
 
 .producto-info {
@@ -531,42 +523,25 @@
   margin-bottom: 0.3rem;
 }
 
-.producto-categoria {
-  font-size: 0.8rem;
-  color: #667eea;
-  margin-bottom: 0.3rem;
-}
-
-.producto-detalles {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.85rem;
+.producto-cantidad {
+  font-size: 0.9rem;
   color: #64748b;
 }
 
-.producto-total {
-  text-align: right;
-  font-size: 0.9rem;
+.status-ready {
   color: #059669;
+  font-weight: 600;
 }
 
 .total-section {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 2px solid #667eea;
-}
-
-.subtotal-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  color: #64748b;
+  border-top: 2px solid #4ecdc4;
 }
 
 .total-final {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #2c3e50;
   background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%);
   padding: 1rem;
@@ -588,6 +563,80 @@
   font-size: 4rem;
   margin-bottom: 1.5rem;
   opacity: 0.5;
+}
+
+/* Custom Dropdown */
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  z-index: 1000;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  animation: dropdownSlide 0.2s ease;
+  min-width: 200px;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vendedores-list {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.vendedor-item {
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.vendedor-item:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.vendedor-item:last-child {
+  border-bottom: none;
+}
+
+.vendedor-option {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.vendedor-option strong {
+  color: #2c3e50;
+  font-size: 0.9rem;
+}
+
+.especialidad {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.pedidos-activos {
+  color: #4ecdc4;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 /* Responsive */
@@ -622,11 +671,6 @@
     flex-direction: column;
   }
   
-  .pending-actions {
-    flex-direction: row;
-    gap: 0.2rem;
-  }
-  
   .stats-mini {
     margin-top: 1rem;
   }
@@ -642,5 +686,21 @@
   
   .table-row td {
     padding: 0.8rem 0.4rem;
+  }
+  
+  .dropdown-content {
+    min-width: 180px;
+  }
+  
+  .action-buttons {
+    flex-direction: row;
+    gap: 0.2rem;
+  }
+  
+  .btn-assign, .btn-pickup, .btn-details {
+    width: auto;
+    min-width: 60px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.7rem;
   }
 }

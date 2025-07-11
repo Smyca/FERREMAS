@@ -1,1 +1,408 @@
-<p>gestion-despachos works!</p>
+<div class="container-fluid p-4">
+  <!-- Header con gradiente -->
+  <div class="header-section mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2 class="header-title">
+          <i class="fas fa-shipping-fast"></i>
+          Gestión de Despachos
+        </h2>
+        <p class="header-subtitle">Coordina y supervisa todas las entregas de pedidos</p>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="stats-mini">
+          <div class="row text-center">
+            <div class="col-4">
+              <div class="stat-item">
+                <span class="stat-number text-warning">{{ getContadorPorEstado('pendiente') }}</span>
+                <span class="stat-label">Pendientes</span>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-item">
+                <span class="stat-number text-primary">{{ getContadorPorEstado('en_preparacion') }}</span>
+                <span class="stat-label">En Prep.</span>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-item">
+                <span class="stat-number text-success">{{ getContadorPorEstado('despachado') }}</span>
+                <span class="stat-label">Despachado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros modernos -->
+  <div class="filters-section mb-4">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-filter"></i> Filtrar por estado
+          </label>
+          <select class="form-select modern-select" [(ngModel)]="filtroEstado">
+            <option value="todos">🔍 Todos los estados</option>
+            <option value="pendiente">⏳ Pendientes</option>
+            <option value="asignado">👤 Asignadas</option>
+            <option value="en_preparacion">🔨 En preparación</option>
+            <option value="despachado">🚚 Despachadas</option>
+            <option value="entregado">✅ Entregadas</option>
+            <option value="cancelado">❌ Canceladas</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-exclamation-triangle"></i> Filtrar por prioridad
+          </label>
+          <select class="form-select modern-select" [(ngModel)]="filtroPrioridad">
+            <option value="todos">🎯 Todas las prioridades</option>
+            <option value="urgente">🚨 Urgente</option>
+            <option value="alta">⬆️ Alta</option>
+            <option value="media">➡️ Media</option>
+            <option value="baja">⬇️ Baja</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-search"></i> Buscar órdenes
+          </label>
+          <input type="text" 
+                 class="form-control modern-input" 
+                 placeholder="🔍 Buscar por cliente, bodeguero, transportista o ID..."
+                 [(ngModel)]="busqueda">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla moderna de órdenes -->
+  <div class="table-container">
+    <div class="table-responsive">
+      <table class="table modern-table">
+        <thead class="table-header">
+          <tr>
+            <th><i class="fas fa-hashtag"></i> ID</th>
+            <th><i class="fas fa-building"></i> Cliente</th>
+            <th><i class="fas fa-calendar"></i> Fechas</th>
+            <th><i class="fas fa-traffic-light"></i> Estado</th>
+            <th><i class="fas fa-exclamation-triangle"></i> Prioridad</th>
+            <th><i class="fas fa-user-hard-hat"></i> Personal</th>
+            <th><i class="fas fa-boxes"></i> Productos</th>
+            <th><i class="fas fa-dollar-sign"></i> Total</th>
+            <th><i class="fas fa-cogs"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let orden of ordenesFiltradas" 
+              class="table-row"
+              [class.selected-row]="ordenSeleccionada?.id === orden.id"
+              (click)="seleccionarOrden(orden)">
+            
+            <td class="id-cell">
+              <span class="id-badge">#{{ orden.id }}</span>
+              <div class="pedido-ref">
+                <small>Pedido #{{ orden.pedidoId }}</small>
+              </div>
+            </td>
+            
+            <td>
+              <div class="cliente-info">
+                <strong class="cliente-name">{{ orden.cliente }}</strong>
+                <div class="contact-info">
+                  <i class="fas fa-map-marker-alt"></i>
+                  {{ orden.direccion }}
+                </div>
+                <div class="contact-info">
+                  <i class="fas fa-phone"></i>
+                  {{ orden.telefono }}
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <div class="fechas-info">
+                <div class="fecha-creacion">
+                  <i class="fas fa-calendar-plus text-info"></i>
+                  {{ orden.fechaCreacion | date:'dd/MM' }}
+                </div>
+                <div class="fecha-entrega" [class.fecha-urgente]="getDiasRestantes(orden.fechaEntrega) <= 1">
+                  <i class="fas fa-truck"></i>
+                  {{ getDiasRestantes(orden.fechaEntrega) }} días
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <span class="status-badge" [ngClass]="getEstadoClass(orden.estado)">
+                <i class="fas fa-circle status-dot"></i>
+                {{ orden.estado.replace('_', ' ') | titlecase }}
+              </span>
+            </td>
+            
+            <td>
+              <span class="priority-badge" [ngClass]="getPrioridadClass(orden.prioridad)">
+                {{ orden.prioridad | titlecase }}
+              </span>
+            </td>
+            
+            <td>
+              <div class="personal-info">
+                <div class="bodeguero-info" *ngIf="orden.bodeguero">
+                  <i class="fas fa-user-hard-hat text-primary"></i>
+                  <small>{{ orden.bodeguero }}</small>
+                </div>
+                <div class="transportista-info" *ngIf="orden.transportista">
+                  <i class="fas fa-truck text-success"></i>
+                  <small>{{ orden.transportista }}</small>
+                </div>
+                <div class="sin-asignar" *ngIf="!orden.bodeguero && !orden.transportista">
+                  <i class="fas fa-user-slash text-muted"></i>
+                  <small>Sin asignar</small>
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <div class="productos-summary">
+                <div class="productos-count">
+                  <i class="fas fa-cubes"></i>
+                  {{ getTotalProductos(orden) }} items
+                </div>
+                <div class="productos-tipos">
+                  {{ orden.productos.length }} productos
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <span class="total-amount">{{ orden.total | currency:'CLP':'symbol':'1.0-0' }}</span>
+            </td>
+            
+            <td>
+              <div class="action-buttons">
+                <!-- Dropdown para asignar bodeguero -->
+                <div class="custom-dropdown" *ngIf="!orden.bodeguero">
+                  <button class="btn btn-assign-bodeguero" 
+                          type="button" 
+                          (click)="toggleDropdown(orden.id * 10); $event.stopPropagation()">
+                    <i class="fas fa-user-plus"></i>
+                    Bodeguero
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="dropdown-content" 
+                       *ngIf="dropdownAbierto === orden.id * 10"
+                       (click)="$event.stopPropagation()">
+                    <div class="personal-list">
+                      <div *ngFor="let bodeguero of getBodeguerosDisponibles()" 
+                           class="personal-item"
+                           (click)="asignarBodeguero(orden, bodeguero.id)">
+                        <div class="personal-option">
+                          <strong>{{ bodeguero.nombre }}</strong>
+                          <small class="especialidad">{{ bodeguero.especialidad }}</small>
+                          <small class="ordenes-activas">{{ bodeguero.ordenes_activas }} órdenes activas</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Dropdown para asignar transportista -->
+                <div class="custom-dropdown" *ngIf="orden.bodeguero && !orden.transportista">
+                  <button class="btn btn-assign-transport" 
+                          type="button" 
+                          (click)="toggleDropdown(orden.id * 20); $event.stopPropagation()">
+                    <i class="fas fa-truck"></i>
+                    Transporte
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="dropdown-content" 
+                       *ngIf="dropdownAbierto === orden.id * 20"
+                       (click)="$event.stopPropagation()">
+                    <div class="personal-list">
+                      <div *ngFor="let transportista of getTransportistasDisponibles()" 
+                           class="personal-item"
+                           (click)="asignarTransportista(orden, transportista.id)">
+                        <div class="personal-option">
+                          <strong>{{ transportista.nombre }}</strong>
+                          <small class="vehiculo">{{ transportista.vehiculo }}</small>
+                          <small class="zona">{{ transportista.zona }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Botones de cambio de estado -->
+                <button *ngIf="orden.estado === 'en_preparacion'" 
+                        class="btn btn-dispatch"
+                        (click)="cambiarEstado(orden, 'despachado'); $event.stopPropagation()">
+                  <i class="fas fa-shipping-fast"></i>
+                  Despachar
+                </button>
+
+                <button *ngIf="orden.estado === 'despachado'" 
+                        class="btn btn-deliver"
+                        (click)="cambiarEstado(orden, 'entregado'); $event.stopPropagation()">
+                  <i class="fas fa-check"></i>
+                  Entregado
+                </button>
+
+                <!-- Botón ver detalles -->
+                <button class="btn btn-details"
+                        (click)="seleccionarOrden(orden); $event.stopPropagation()">
+                  <i class="fas fa-eye"></i>
+                  Ver
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Panel de detalles de la orden -->
+  <div *ngIf="ordenSeleccionada" class="details-panel mt-4">
+    <div class="details-card">
+      <div class="details-header">
+        <h4>
+          <i class="fas fa-clipboard-list"></i>
+          Detalles de la Orden #{{ ordenSeleccionada.id }}
+        </h4>
+        <span class="close-btn" (click)="ordenSeleccionada = undefined">
+          <i class="fas fa-times"></i>
+        </span>
+      </div>
+      
+      <div class="details-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-card">
+              <h6><i class="fas fa-info-circle"></i> Información de la Orden</h6>
+              <div class="info-item">
+                <strong>Cliente:</strong> {{ ordenSeleccionada.cliente }}
+              </div>
+              <div class="info-item">
+                <strong>Email:</strong> 
+                <a href="mailto:{{ ordenSeleccionada.email }}" class="email-link">
+                  {{ ordenSeleccionada.email }}
+                </a>
+              </div>
+              <div class="info-item">
+                <strong>Teléfono:</strong> 
+                <a href="tel:{{ ordenSeleccionada.telefono }}" class="phone-link">
+                  {{ ordenSeleccionada.telefono }}
+                </a>
+              </div>
+              <div class="info-item">
+                <strong>Dirección de entrega:</strong> {{ ordenSeleccionada.direccion }}
+              </div>
+              <div class="info-item">
+                <strong>Fecha de creación:</strong> {{ ordenSeleccionada.fechaCreacion | date:'dd/MM/yyyy' }}
+              </div>
+              <div class="info-item">
+                <strong>Fecha de entrega:</strong> {{ ordenSeleccionada.fechaEntrega | date:'dd/MM/yyyy' }}
+              </div>
+              <div class="info-item">
+                <strong>Estado:</strong> 
+                <span class="status-badge" [ngClass]="getEstadoClass(ordenSeleccionada.estado)">
+                  {{ ordenSeleccionada.estado.replace('_', ' ') | titlecase }}
+                </span>
+              </div>
+              <div class="info-item">
+                <strong>Prioridad:</strong>
+                <span class="priority-badge" [ngClass]="getPrioridadClass(ordenSeleccionada.prioridad)">
+                  {{ ordenSeleccionada.prioridad | titlecase }}
+                </span>
+              </div>
+              <div class="info-item" *ngIf="ordenSeleccionada.bodeguero">
+                <strong>Bodeguero asignado:</strong>
+                <span class="personal-badge bodeguero">
+                  <i class="fas fa-user-hard-hat"></i>
+                  {{ ordenSeleccionada.bodeguero }}
+                </span>
+              </div>
+              <div class="info-item" *ngIf="ordenSeleccionada.transportista">
+                <strong>Transportista asignado:</strong>
+                <span class="personal-badge transportista">
+                  <i class="fas fa-truck"></i>
+                  {{ ordenSeleccionada.transportista }}
+                </span>
+              </div>
+              <div class="info-item" *ngIf="ordenSeleccionada.vehiculo">
+                <strong>Vehículo:</strong> {{ ordenSeleccionada.vehiculo }}
+              </div>
+              <div class="info-item" *ngIf="ordenSeleccionada.observaciones">
+                <strong>Observaciones:</strong>
+                <p class="observaciones">{{ ordenSeleccionada.observaciones }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="productos-card">
+              <h6><i class="fas fa-boxes"></i> Productos a Despachar</h6>
+              <div class="productos-list">
+                <div *ngFor="let producto of ordenSeleccionada.productos; let i = index" 
+                     class="producto-item">
+                  
+                  <div class="producto-numero">{{ i + 1 }}</div>
+                  
+                  <div class="producto-info">
+                    <div class="producto-nombre">{{ producto.nombre }}</div>
+                    <div class="producto-categoria">
+                      <i class="fas fa-tag"></i>
+                      {{ producto.categoria }}
+                    </div>
+                    <div class="producto-ubicacion">
+                      <i class="fas fa-map-marker-alt"></i>
+                      {{ producto.ubicacion }}
+                    </div>
+                  </div>
+                  
+                  <div class="producto-cantidad">
+                    <span class="cantidad-badge">{{ producto.cantidad }}</span>
+                    <small>unidades</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="total-section">
+                <div class="resumen-productos">
+                  <div class="total-items">
+                    <i class="fas fa-cubes"></i>
+                    Total de productos: {{ getTotalProductos(ordenSeleccionada) }} unidades
+                  </div>
+                  <div class="total-tipos">
+                    <i class="fas fa-list"></i>
+                    Tipos de productos: {{ ordenSeleccionada.productos.length }}
+                  </div>
+                </div>
+                <div class="total-final">
+                  <strong>Valor total de la orden: {{ ordenSeleccionada.total | currency:'CLP':'symbol':'1.0-0' }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay órdenes -->
+  <div *ngIf="ordenesFiltradas.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="fas fa-shipping-fast"></i>
+    </div>
+    <h4>No hay órdenes de despacho</h4>
+    <p>No se encontraron órdenes que coincidan con los filtros seleccionados.</p>
+  </div>
+</div>

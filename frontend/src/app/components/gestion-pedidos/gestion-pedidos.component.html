@@ -1,1 +1,342 @@
-<p>gestion-pedidos works!</p>
+<div class="container-fluid p-4">
+  <!-- Header con gradiente -->
+  <div class="header-section mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2 class="header-title">
+          <i class="fas fa-tasks"></i>
+          Gestión de Pedidos
+        </h2>
+        <p class="header-subtitle">Aprueba, rechaza y gestiona todos los pedidos de clientes</p>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="stats-mini">
+          <div class="row text-center">
+            <div class="col-3">
+              <div class="stat-item">
+                <span class="stat-number text-warning">{{ getContadorPorEstado('pendiente') }}</span>
+                <span class="stat-label">Pendientes</span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="stat-item">
+                <span class="stat-number text-success">{{ getContadorPorEstado('aprobado') }}</span>
+                <span class="stat-label">Aprobados</span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="stat-item">
+                <span class="stat-number text-info">{{ getContadorPorEstado('en_preparacion') }}</span>
+                <span class="stat-label">En Prep.</span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="stat-item">
+                <span class="stat-number text-danger">{{ getContadorPorEstado('rechazado') }}</span>
+                <span class="stat-label">Rechazados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros avanzados -->
+  <div class="filters-section mb-4">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-filter"></i> Filtrar por estado
+          </label>
+          <select class="form-select modern-select" [(ngModel)]="filtroEstado">
+            <option value="todos">🔍 Todos los estados</option>
+            <option value="pendiente">⏳ Pendientes</option>
+            <option value="aprobado">✅ Aprobados</option>
+            <option value="en_preparacion">🔨 En preparación</option>
+            <option value="rechazado">❌ Rechazados</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-exclamation-triangle"></i> Filtrar por prioridad
+          </label>
+          <select class="form-select modern-select" [(ngModel)]="filtroPrioridad">
+            <option value="todos">🎯 Todas las prioridades</option>
+            <option value="urgente">🚨 Urgente</option>
+            <option value="alta">⬆️ Alta</option>
+            <option value="media">➡️ Media</option>
+            <option value="baja">⬇️ Baja</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-search"></i> Buscar pedidos
+          </label>
+          <input type="text" 
+                 class="form-control modern-input" 
+                 placeholder="🔍 Buscar por cliente, vendedor o ID..."
+                 [(ngModel)]="busqueda">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla moderna de pedidos -->
+  <div class="table-container">
+    <div class="table-responsive">
+      <table class="table modern-table">
+        <thead class="table-header">
+          <tr>
+            <th><i class="fas fa-hashtag"></i> ID</th>
+            <th><i class="fas fa-building"></i> Cliente</th>
+            <th><i class="fas fa-user-tie"></i> Vendedor</th>
+            <th><i class="fas fa-calendar"></i> Fechas</th>
+            <th><i class="fas fa-traffic-light"></i> Estado</th>
+            <th><i class="fas fa-exclamation-triangle"></i> Prioridad</th>
+            <th><i class="fas fa-boxes"></i> Productos</th>
+            <th><i class="fas fa-dollar-sign"></i> Total</th>
+            <th><i class="fas fa-cogs"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidosFiltrados" 
+              class="table-row"
+              [class.selected-row]="pedidoSeleccionado?.id === pedido.id"
+              (click)="seleccionarPedido(pedido)">
+            
+            <td class="id-cell">
+              <span class="id-badge">#{{ pedido.id }}</span>
+            </td>
+            
+            <td>
+              <div class="cliente-info">
+                <strong class="cliente-name">{{ pedido.cliente }}</strong>
+                <div class="contact-info">
+                  <i class="fas fa-envelope"></i>
+                  {{ pedido.email }}
+                </div>
+                <div class="contact-info">
+                  <i class="fas fa-phone"></i>
+                  {{ pedido.telefono }}
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <div class="vendedor-badge">
+                <i class="fas fa-user"></i>
+                {{ pedido.vendedor }}
+              </div>
+            </td>
+            
+            <td>
+              <div class="fechas-info">
+                <div class="fecha-pedido">
+                  <i class="fas fa-calendar-plus text-primary"></i>
+                  {{ pedido.fecha | date:'dd/MM' }}
+                </div>
+                <div class="fecha-limite" [class.fecha-urgente]="getDiasRestantes(pedido.fechaLimite) <= 2">
+                  <i class="fas fa-clock"></i>
+                  {{ getDiasRestantes(pedido.fechaLimite) }} días
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <span class="status-badge" [ngClass]="getEstadoClass(pedido.estado)">
+                <i class="fas fa-circle status-dot"></i>
+                {{ pedido.estado | titlecase }}
+              </span>
+            </td>
+            
+            <td>
+              <span class="priority-badge" [ngClass]="getPrioridadClass(pedido.prioridad)">
+                {{ pedido.prioridad | titlecase }}
+              </span>
+            </td>
+            
+            <td>
+              <div class="productos-summary">
+                <div class="productos-count">
+                  <i class="fas fa-cubes"></i>
+                  {{ getTotalProductos(pedido) }} items
+                </div>
+                <div class="productos-tipos">
+                  {{ pedido.productos.length }} productos
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <span class="total-amount">{{ pedido.total | currency:'CLP':'symbol':'1.0-0' }}</span>
+            </td>
+            
+            <td>
+              <div class="action-buttons">
+                <!-- Botones para pedidos pendientes -->
+                <div *ngIf="pedido.estado === 'pendiente'" class="pending-actions">
+                  <button class="btn btn-approve" 
+                          (click)="aprobarPedido(pedido); $event.stopPropagation()"
+                          title="Aprobar pedido">
+                    <i class="fas fa-check"></i>
+                    Aprobar
+                  </button>
+                  <button class="btn btn-reject" 
+                          (click)="rechazarPedido(pedido); $event.stopPropagation()"
+                          title="Rechazar pedido">
+                    <i class="fas fa-times"></i>
+                    Rechazar
+                  </button>
+                </div>
+
+                <!-- Botón para pedidos aprobados -->
+                <button *ngIf="pedido.estado === 'aprobado'" 
+                        class="btn btn-prepare"
+                        (click)="enviarAPreparacion(pedido); $event.stopPropagation()">
+                  <i class="fas fa-hammer"></i>
+                  A Bodega
+                </button>
+
+                <!-- Botón ver detalles -->
+                <button class="btn btn-details"
+                        (click)="seleccionarPedido(pedido); $event.stopPropagation()">
+                  <i class="fas fa-eye"></i>
+                  Ver
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Panel de detalles del pedido -->
+  <div *ngIf="pedidoSeleccionado" class="details-panel mt-4">
+    <div class="details-card">
+      <div class="details-header">
+        <h4>
+          <i class="fas fa-clipboard-list"></i>
+          Detalles del Pedido #{{ pedidoSeleccionado.id }}
+        </h4>
+        <span class="close-btn" (click)="pedidoSeleccionado = undefined">
+          <i class="fas fa-times"></i>
+        </span>
+      </div>
+      
+      <div class="details-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-card">
+              <h6><i class="fas fa-info-circle"></i> Información del Pedido</h6>
+              <div class="info-item">
+                <strong>Cliente:</strong> {{ pedidoSeleccionado.cliente }}
+              </div>
+              <div class="info-item">
+                <strong>Vendedor responsable:</strong> {{ pedidoSeleccionado.vendedor }}
+              </div>
+              <div class="info-item">
+                <strong>Email:</strong> 
+                <a href="mailto:{{ pedidoSeleccionado.email }}" class="email-link">
+                  {{ pedidoSeleccionado.email }}
+                </a>
+              </div>
+              <div class="info-item">
+                <strong>Teléfono:</strong> 
+                <a href="tel:{{ pedidoSeleccionado.telefono }}" class="phone-link">
+                  {{ pedidoSeleccionado.telefono }}
+                </a>
+              </div>
+              <div class="info-item">
+                <strong>Fecha de pedido:</strong> {{ pedidoSeleccionado.fecha | date:'dd/MM/yyyy' }}
+              </div>
+              <div class="info-item">
+                <strong>Fecha límite:</strong> {{ pedidoSeleccionado.fechaLimite | date:'dd/MM/yyyy' }}
+              </div>
+              <div class="info-item">
+                <strong>Estado:</strong> 
+                <span class="status-badge" [ngClass]="getEstadoClass(pedidoSeleccionado.estado)">
+                  {{ pedidoSeleccionado.estado | titlecase }}
+                </span>
+              </div>
+              <div class="info-item">
+                <strong>Prioridad:</strong>
+                <span class="priority-badge" [ngClass]="getPrioridadClass(pedidoSeleccionado.prioridad)">
+                  {{ pedidoSeleccionado.prioridad | titlecase }}
+                </span>
+              </div>
+              <div class="info-item" *ngIf="pedidoSeleccionado.observaciones">
+                <strong>Observaciones:</strong>
+                <p class="observaciones">{{ pedidoSeleccionado.observaciones }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="productos-card">
+              <h6><i class="fas fa-boxes"></i> Productos Solicitados</h6>
+              <div class="productos-list">
+                <div *ngFor="let producto of pedidoSeleccionado.productos; let i = index" 
+                     class="producto-item">
+                  
+                  <div class="producto-numero">{{ i + 1 }}</div>
+                  
+                  <div class="producto-info">
+                    <div class="producto-nombre">{{ producto.nombre }}</div>
+                    <div class="producto-categoria">
+                      <i class="fas fa-tag"></i>
+                      {{ producto.categoria }}
+                    </div>
+                    <div class="producto-detalles">
+                      <span class="cantidad">
+                        <i class="fas fa-cubes"></i>
+                        {{ producto.cantidad }} unidades
+                      </span>
+                      <span class="precio">
+                        <i class="fas fa-dollar-sign"></i>
+                        {{ producto.precio | currency:'CLP':'symbol':'1.0-0' }} c/u
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div class="producto-total">
+                    <strong>{{ (producto.cantidad * producto.precio) | currency:'CLP':'symbol':'1.0-0' }}</strong>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="total-section">
+                <div class="subtotal-info">
+                  <div class="total-items">
+                    Total de productos: {{ getTotalProductos(pedidoSeleccionado) }} unidades
+                  </div>
+                  <div class="total-tipos">
+                    Tipos de productos: {{ pedidoSeleccionado.productos.length }}
+                  </div>
+                </div>
+                <div class="total-final">
+                  <strong>Total del pedido: {{ pedidoSeleccionado.total | currency:'CLP':'symbol':'1.0-0' }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay pedidos -->
+  <div *ngIf="pedidosFiltrados.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="fas fa-tasks"></i>
+    </div>
+    <h4>No hay pedidos para gestionar</h4>
+    <p>No se encontraron pedidos que coincidan con los filtros seleccionados.</p>
+  </div>
+</div>

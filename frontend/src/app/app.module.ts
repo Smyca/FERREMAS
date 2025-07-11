@@ -12,10 +12,12 @@ import { FormsModule } from '@angular/forms';
 import { ViewClientProductsModule } from './components/view-client-products/view-client-products.module';
 import { ClientPayComponent } from './components/client-pay/client-pay.component';
 import { ClientPayModule } from './components/client-pay/client-pay.module';
+import { SidebarBodegaComponent } from './components/sidebar-bodega/sidebar-bodega.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+ 
     
     
   ],

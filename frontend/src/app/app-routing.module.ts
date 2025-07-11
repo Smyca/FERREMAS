@@ -13,7 +13,8 @@ const routes: Routes = [
     component: LoginComponent
   },
   { path: 'view-vendor', loadChildren: () => import('./components/view-vendor/view-vendor.module').then(m => m.ViewVendorModule) },
-  { path: 'client-pay', loadChildren: () => import('./components/client-pay/client-pay.module').then(m => m.ClientPayModule) }
+  { path: 'client-pay', loadChildren: () => import('./components/client-pay/client-pay.module').then(m => m.ClientPayModule) },
+  { path: 'view-bodega', loadChildren: () => import('./components/view-bodega/view-bodega.module').then(m => m.ViewBodegaModule) }
 ];
 
 @NgModule({

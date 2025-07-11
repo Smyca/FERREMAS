@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { GestionPedidosRoutingModule } from './gestion-pedidos-routing.module';
 import { GestionPedidosComponent } from './gestion-pedidos.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { GestionPedidosComponent } from './gestion-pedidos.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     GestionPedidosRoutingModule
   ]
 })

@@ -1,0 +1,305 @@
+<div class="container-fluid p-4">
+  <!-- Header con gradiente -->
+  <div class="header-section mb-4">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2 class="header-title">
+          <i class="fas fa-shipping-fast"></i>
+          Gestión de Despachos - Bodega
+        </h2>
+        <p class="header-subtitle">Asigna pedidos listos a vendedores para su entrega</p>
+      </div>
+      <div class="col-md-4 text-end">
+        <div class="stats-mini">
+          <div class="row">
+            <div class="col">
+              <div class="stat-item">
+                <span class="stat-number text-warning">{{ getContadorPorEstado('listo') }}</span>
+                <span class="stat-label">Listos</span>
+              </div>
+            </div>
+            <div class="col">
+              <div class="stat-item">
+                <span class="stat-number text-info">{{ getContadorPorEstado('asignado') }}</span>
+                <span class="stat-label">Asignados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros mejorados -->
+  <div class="filters-section mb-4">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-filter"></i> Filtrar por estado
+          </label>
+          <select class="form-select modern-select" [(ngModel)]="filtroEstado">
+            <option value="todos">🔍 Todos los pedidos</option>
+            <option value="listo">✅ Listos para despacho</option>
+            <option value="asignado">👤 Asignados</option>
+            <option value="retirado">📦 Retirados</option>
+            <option value="en_transito">🚚 En tránsito</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="filter-group">
+          <label class="filter-label">
+            <i class="fas fa-search"></i> Buscar
+          </label>
+          <input type="text" 
+                 class="form-control modern-input" 
+                 placeholder="🔍 Buscar por cliente, vendedor o ID..."
+                 [(ngModel)]="busqueda">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="vendedores-disponibles">
+          <label class="filter-label">
+            <i class="fas fa-users"></i> Vendedores disponibles
+          </label>
+          <div class="vendedores-count">
+            <span class="count-badge">{{ getVendedoresDisponibles().length }}</span>
+            <small>de {{ vendedores.length }} vendedores</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla colorida de pedidos -->
+  <div class="table-container">
+    <div class="table-responsive">
+      <table class="table modern-table">
+        <thead class="table-header">
+          <tr>
+            <th><i class="fas fa-hashtag"></i> ID</th>
+            <th><i class="fas fa-user"></i> Cliente</th>
+            <th><i class="fas fa-calendar"></i> Fechas</th>
+            <th><i class="fas fa-traffic-light"></i> Estado</th>
+            <th><i class="fas fa-exclamation-triangle"></i> Prioridad</th>
+            <th><i class="fas fa-user-tie"></i> Vendedor</th>
+            <th><i class="fas fa-dollar-sign"></i> Total</th>
+            <th><i class="fas fa-cogs"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidosFiltrados" 
+              class="table-row"
+              [class.selected-row]="pedidoSeleccionado?.id === pedido.id"
+              (click)="seleccionarPedido(pedido)">
+            
+            <td class="id-cell">
+              <span class="id-badge">#{{ pedido.id }}</span>
+            </td>
+            
+            <td>
+              <div class="cliente-info">
+                <strong class="cliente-name">{{ pedido.cliente }}</strong>
+                <div class="productos-count">
+                  <i class="fas fa-boxes"></i>
+                  {{ pedido.productos.length }} productos
+                </div>
+                <div class="telefono-info">
+                  <i class="fas fa-phone"></i>
+                  {{ pedido.telefono }}
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <div class="fechas-info">
+                <div class="fecha-preparacion">
+                  <i class="fas fa-check-circle text-success"></i>
+                  {{ pedido.fechaPreparacion | date:'dd/MM' }}
+                </div>
+                <div class="fecha-entrega" [class.fecha-urgente]="getDiasRestantes(pedido.fechaEntrega) <= 1">
+                  <i class="fas fa-clock"></i>
+                  {{ getDiasRestantes(pedido.fechaEntrega) }} días
+                </div>
+              </div>
+            </td>
+            
+            <td>
+              <span class="status-badge" [ngClass]="getEstadoClass(pedido.estado)">
+                <i class="fas fa-circle status-dot"></i>
+                {{ pedido.estado | titlecase }}
+              </span>
+            </td>
+            
+            <td>
+              <span class="priority-badge" [ngClass]="getPrioridadClass(pedido.prioridad)">
+                {{ pedido.prioridad | titlecase }}
+              </span>
+            </td>
+            
+            <td>
+              <div class="vendedor-info">
+                <span *ngIf="pedido.vendedorAsignado" class="vendedor-asignado">
+                  <i class="fas fa-user-check text-success"></i>
+                  {{ pedido.vendedorAsignado }}
+                </span>
+                <span *ngIf="!pedido.vendedorAsignado" class="sin-vendedor">
+                  <i class="fas fa-user-slash text-muted"></i>
+                  Sin asignar
+                </span>
+              </div>
+            </td>
+            
+            <td>
+              <span class="total-amount">{{ pedido.total | currency:'CLP':'symbol':'1.0-0' }}</span>
+            </td>
+            
+            <td>
+              <div class="action-buttons">
+                <!-- Dropdown manual para asignar vendedor -->
+                <div class="custom-dropdown" *ngIf="pedido.estado === 'listo'">
+                  <button class="btn btn-assign" 
+                          type="button" 
+                          (click)="toggleDropdown(pedido.id); $event.stopPropagation()">
+                    <i class="fas fa-user-plus"></i>
+                    Asignar
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="dropdown-content" 
+                       *ngIf="dropdownAbierto === pedido.id"
+                       (click)="$event.stopPropagation()">
+                    <div class="vendedores-list">
+                      <div *ngFor="let vendedor of getVendedoresDisponibles()" 
+                           class="vendedor-item"
+                           (click)="asignarVendedor(pedido, vendedor.id); cerrarDropdown()">
+                        <div class="vendedor-option">
+                          <strong>{{ vendedor.nombre }}</strong>
+                          <small class="especialidad">{{ vendedor.especialidad }}</small>
+                          <small class="pedidos-activos">{{ vendedor.pedidosActivos }} pedidos activos</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Botón marcar como retirado -->
+                <button *ngIf="pedido.estado === 'asignado'" 
+                        class="btn btn-pickup"
+                        (click)="marcarComoRetirado(pedido); $event.stopPropagation()">
+                  <i class="fas fa-hand-holding"></i>
+                  Retirado
+                </button>
+
+                <!-- Botón ver detalles -->
+                <button class="btn btn-details"
+                        (click)="seleccionarPedido(pedido); $event.stopPropagation()">
+                  <i class="fas fa-eye"></i>
+                  Ver
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Panel de detalles del pedido -->
+  <div *ngIf="pedidoSeleccionado" class="details-panel mt-4">
+    <div class="details-card">
+      <div class="details-header">
+        <h4>
+          <i class="fas fa-clipboard-list"></i>
+          Detalles del Pedido #{{ pedidoSeleccionado.id }}
+        </h4>
+        <span class="close-btn" (click)="pedidoSeleccionado = undefined">
+          <i class="fas fa-times"></i>
+        </span>
+      </div>
+      
+      <div class="details-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="info-card">
+              <h6><i class="fas fa-info-circle"></i> Información del Pedido</h6>
+              <div class="info-item">
+                <strong>Cliente:</strong> {{ pedidoSeleccionado.cliente }}
+              </div>
+              <div class="info-item">
+                <strong>Teléfono:</strong> {{ pedidoSeleccionado.telefono }}
+              </div>
+              <div class="info-item">
+                <strong>Dirección:</strong> {{ pedidoSeleccionado.direccionEntrega }}
+              </div>
+              <div class="info-item">
+                <strong>Estado:</strong> 
+                <span class="status-badge small" [ngClass]="getEstadoClass(pedidoSeleccionado.estado)">
+                  {{ pedidoSeleccionado.estado | titlecase }}
+                </span>
+              </div>
+              <div class="info-item">
+                <strong>Prioridad:</strong>
+                <span class="priority-badge small" [ngClass]="getPrioridadClass(pedidoSeleccionado.prioridad)">
+                  {{ pedidoSeleccionado.prioridad | titlecase }}
+                </span>
+              </div>
+              <div class="info-item" *ngIf="pedidoSeleccionado.vendedorAsignado">
+                <strong>Vendedor asignado:</strong>
+                <span class="vendedor-badge">
+                  <i class="fas fa-user"></i>
+                  {{ pedidoSeleccionado.vendedorAsignado }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="productos-card">
+              <h6><i class="fas fa-boxes"></i> Productos Preparados</h6>
+              <div class="productos-list">
+                <div *ngFor="let producto of pedidoSeleccionado.productos" 
+                     class="producto-item producto-preparado">
+                  
+                  <div class="producto-check">
+                    <i class="fas fa-check-circle text-success"></i>
+                  </div>
+                  
+                  <div class="producto-info">
+                    <div class="producto-nombre">{{ producto.nombre }}</div>
+                    <div class="producto-cantidad">
+                      <i class="fas fa-cubes"></i>
+                      Cantidad: {{ producto.cantidad }}
+                    </div>
+                  </div>
+                  
+                  <div class="producto-status">
+                    <span class="status-ready">
+                      <i class="fas fa-check-circle"></i>
+                      Listo
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="total-section">
+                <div class="total-final">
+                  <strong>Total del pedido: {{ pedidoSeleccionado.total | currency:'CLP':'symbol':'1.0-0' }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay pedidos -->
+  <div *ngIf="pedidosFiltrados.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="fas fa-shipping-fast"></i>
+    </div>
+    <h4>No hay pedidos para despachar</h4>
+    <p>No se encontraron pedidos que coincidan con los filtros seleccionados.</p>
+  </div>
+</div>
