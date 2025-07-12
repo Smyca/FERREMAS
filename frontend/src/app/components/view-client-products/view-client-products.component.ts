@@ -3,6 +3,8 @@ import { ProductoService, Producto } from '../../services/producto.service';
 import { HttpClient } from '@angular/common/http';
 import { ElementRef, ViewChild } from '@angular/core';
 import { OnInit, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-view-client-products',
   templateUrl: './view-client-products.component.html',
@@ -42,11 +44,11 @@ export class ViewClientProductsComponent implements OnInit, AfterViewInit {
   // =====================================
   // Constructor e inicialización
   // =====================================
-  constructor(private productoService: ProductoService, private http: HttpClient) {}
+  constructor(private productoService: ProductoService, private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
     this.cargarProductos();
-    this.cambiarMoneda();
+    this.loadCartFromStorage(); // Cargar carrito al inicializar
   }
 
   ngAfterViewInit(): void {
@@ -345,13 +347,29 @@ export class ViewClientProductsComponent implements OnInit, AfterViewInit {
     const existingItem = this.cartItems.find(item => item.codigoProducto === product.codigoProducto);
     
     if (existingItem) {
-      existingItem.quantity += 1;
+      if (existingItem.quantity < product.stock) {
+        existingItem.quantity++;
+      } else {
+        alert('No hay suficiente stock disponible');
+        return;
+      }
     } else {
-      this.cartItems.push({
-        ...product,
-        quantity: 1
-      });
+      if (product.stock > 0) {
+        this.cartItems.push({
+          ...product,
+          quantity: 1
+        });
+      } else {
+        alert('Producto sin stock');
+        return;
+      }
     }
+    
+    // Sincronizar con localStorage
+    this.syncCartToStorage();
+    
+    // Mostrar mensaje de confirmación
+    this.showAddToCartMessage(product.nombre);
   }
 
   removeFromCart(product: any) {
@@ -362,14 +380,19 @@ export class ViewClientProductsComponent implements OnInit, AfterViewInit {
   }
 
   increaseQuantity(item: any) {
-    item.quantity += 1;
+    const product = this.productos.find(p => p.codigoProducto === item.codigoProducto);
+    if (product && item.quantity < product.stock) {
+      item.quantity++;
+      this.syncCartToStorage();
+    } else {
+      alert('No hay suficiente stock disponible');
+    }
   }
 
   decreaseQuantity(item: any) {
     if (item.quantity > 1) {
-      item.quantity -= 1;
-    } else {
-      this.removeFromCart(item);
+      item.quantity--;
+      this.syncCartToStorage();
     }
   }
 
@@ -387,12 +410,95 @@ export class ViewClientProductsComponent implements OnInit, AfterViewInit {
 
   clearCart() {
     this.cartItems = [];
-    this.cartModalVisible = false;
+    localStorage.removeItem('cartItems');
+    localStorage.removeItem('cartTotal');
+    localStorage.removeItem('selectedCurrency');
   }
 
   proceedToCheckout() {
-    // Aquí puedes implementar la lógica para proceder al pago
-    console.log('Proceder al pago:', this.cartItems);
-    alert('Función de pago en desarrollo...');
+    if (this.cartItems.length === 0) {
+      alert('El carrito está vacío');
+      return;
+    }
+
+    // Guardar los datos del carrito en localStorage para pasarlos a la vista de pago
+    localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+    localStorage.setItem('cartTotal', JSON.stringify(this.getCartTotal()));
+    localStorage.setItem('selectedCurrency', this.monedaSeleccionada);
+
+    // Cerrar el modal del carrito
+    this.cartModalVisible = false;
+
+    // Redirigir a la vista de pago
+    this.router.navigate(['/client-pay']);
+  }
+
+  // Método para cargar el carrito desde localStorage
+  loadCartFromStorage() {
+    const cartItemsData = localStorage.getItem('cartItems');
+    const currencyData = localStorage.getItem('selectedCurrency');
+
+    if (cartItemsData) {
+      this.cartItems = JSON.parse(cartItemsData);
+    }
+    if (currencyData) {
+      this.monedaSeleccionada = currencyData;
+    }
+  }
+
+  // Método para sincronizar el carrito con localStorage cada vez que se modifica
+  syncCartToStorage() {
+    localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+    localStorage.setItem('selectedCurrency', this.monedaSeleccionada);
+  }
+
+  // Método para mostrar mensaje de confirmación al agregar producto
+  showAddToCartMessage(productName: string) {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.innerHTML = `✅ ${productName} agregado al carrito`;
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: #27ae60;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 9999;
+      font-weight: 500;
+      animation: slideIn 0.3s ease-out;
+    `;
+    
+    // Agregar animación CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Agregar al DOM
+    document.body.appendChild(notification);
+    
+    // Remover después de 3 segundos
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease-in';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+        if (style.parentNode) {
+          style.parentNode.removeChild(style);
+        }
+      }, 300);
+    }, 3000);
   }
 }

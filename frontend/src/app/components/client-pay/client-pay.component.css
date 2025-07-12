@@ -32,7 +32,10 @@
 
 /* Botón volver */
 .back-button-container {
+  display: flex;
+  gap: 15px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 /* Contenedor principal */
@@ -311,6 +314,16 @@
   background-color: #7f8c8d;
 }
 
+.btn-info {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: white;
+}
+
+.btn-info:hover {
+  background: linear-gradient(135deg, #138496, #117a8b);
+  transform: translateY(-2px);
+}
+
 .action-buttons {
   display: flex;
   gap: 15px;
@@ -371,5 +384,13 @@
   
   .container {
     padding: 10px;
+  }
+  
+  .back-button-container {
+    flex-direction: column;
+  }
+  
+  .back-button-container .btn {
+    width: 100%;
   }
 }

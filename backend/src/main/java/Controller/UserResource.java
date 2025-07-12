@@ -32,7 +32,7 @@ public class UserResource {
         LoginResponse resp = new LoginResponse();
         if (usuario != null) {
             resp.success = true;
-            resp.message = "Login correcto";
+          
             return Response.ok(resp).build();
         } else {
             resp.success = false;

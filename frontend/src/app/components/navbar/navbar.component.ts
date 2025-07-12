@@ -63,7 +63,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   navigateToProducts() {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/']);
   }
 
   navigateToAdmin() {

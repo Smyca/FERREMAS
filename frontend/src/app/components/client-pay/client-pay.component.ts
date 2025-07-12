@@ -191,6 +191,12 @@ export class ClientPayComponent implements OnInit, AfterViewInit {
   }
 
   goBack() {
-    this.router.navigate(['/products']);
+    // No limpiar el carrito al volver - mantener los datos para que el usuario pueda continuar comprando
+    this.router.navigate(['/']);
+  }
+
+  addMoreProducts() {
+    // Método alternativo para volver a productos manteniendo el carrito
+    this.router.navigate(['/']);
   }
 }
