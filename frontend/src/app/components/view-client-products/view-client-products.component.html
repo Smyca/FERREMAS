@@ -114,10 +114,14 @@
               <div class="product-price">
                 {{ formatNumber(product.precio) }} {{ monedaSeleccionada }}
               </div>
-              <div class="button-group">
-                <button class="btn btn-primary" (click)="addToCart(product)">🛒 Agregar</button>
-                <button class="btn btn-warning" (click)="abrirModalEditar(product)">✏️ Editar</button>
-                <button class="btn btn-danger" (click)="eliminarProducto(product)">🗑️</button>
+              <div class="add-to-cart-section">
+                <button 
+                  class="btn btn-primary add-to-cart-btn" 
+                  (click)="addToCart(product)"
+                  [disabled]="product.stock === 0">
+                  <span *ngIf="product.stock > 0">🛒 Agregar al Carrito</span>
+                  <span *ngIf="product.stock === 0">Sin Stock</span>
+                </button>
               </div>
             </div>
           </div>
@@ -125,75 +129,6 @@
       </div>
     </div>
 
-    <!-- Modal para Crear Producto -->
-    <div class="modal" [style.display]="modalVisible ? 'block' : 'none'">
-      <div class="modal-content">
-        <span class="close" (click)="cerrarModal()">&times;</span>
-        <h2>{{modalTitle}}</h2>
-        <form (ngSubmit)="guardarProducto()" #productForm="ngForm">
-          <div class="form-group">
-            <label for="codigoProducto">Código del Producto</label>
-            <input type="text" id="codigoProducto" name="codigoProducto" 
-                   [(ngModel)]="productoSeleccionado.codigoProducto" required>
-          </div>
-          <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" 
-                   [(ngModel)]="productoSeleccionado.nombre" required>
-          </div>
-          <div class="form-group">
-            <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" rows="3"
-                      [(ngModel)]="productoSeleccionado.descripcion"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="marca">Marca</label>
-            <input type="text" id="marca" name="marca" 
-                   [(ngModel)]="productoSeleccionado.marca" required>
-          </div>
-          <div class="form-group">
-            <label for="categoria">Categoría</label>
-            <select id="categoria" name="categoria" 
-                    [(ngModel)]="productoSeleccionado.categoria" required>
-              <option value="">Seleccionar categoría</option>
-              <option value="Herramientas Eléctricas">Herramientas Eléctricas</option>
-              <option value="Herramientas Manuales">Herramientas Manuales</option>
-              <option value="Materiales Básicos">Materiales Básicos</option>
-              <option value="Acabados">Acabados</option>
-              <option value="Equipos de Seguridad">Equipos de Seguridad</option>
-              <option value="Tornillos y Anclajes">Tornillos y Anclajes</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="precio">Precio</label>
-            <input type="number" id="precio" name="precio" step="0.01"
-                   [(ngModel)]="productoSeleccionado.precio" required>
-          </div>
-          <div class="form-group">
-            <label for="stock">Stock</label>
-            <input type="number" id="stock" name="stock"
-                   [(ngModel)]="productoSeleccionado.stock" required>
-          </div>
-          <div class="button-group">
-            <button type="submit" class="btn btn-success">💾 Guardar</button>
-            <button type="button" class="btn btn-danger" (click)="cerrarModal()">❌ Cancelar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Modal de Confirmación para Eliminar -->
-    <div class="modal" [style.display]="modalConfirmacionVisible ? 'block' : 'none'">
-      <div class="modal-content">
-        <h2>Confirmar Eliminación</h2>
-        <p>¿Estás seguro que deseas eliminar el producto "{{ productoAEliminar?.nombre }}"?</p>
-        <div class="button-group">
-          <button class="btn btn-danger" (click)="confirmarEliminar()">✔️ Aceptar</button>
-          <button class="btn btn-secondary" (click)="cancelarEliminar()">❌ Cancelar</button>
-        </div>
-      </div>
-    </div>
-    
     <!-- PayPal Button Container -->
     <div class="paypal-button-container" style="margin: 20px auto; max-width: 500px; padding: 20px;">
       <h3>Prueba de Pago con PayPal</h3>

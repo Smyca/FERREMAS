@@ -25,20 +25,26 @@ export class LoginComponent {
     private authService: AuthService
   ) {}
 
-
-
   onLogin() {
     this.authService.login(this.username, this.password).subscribe({
       next: (res) => {
         if (res.success) {
-          this.router.navigate(['/']);
+          // Guardar información del usuario en localStorage
+          localStorage.setItem('authToken', res.token || 'dummy-token');
+          localStorage.setItem('username', this.username);
+          localStorage.setItem('isLoggedIn', 'true');
+          
+          // Opcional: guardar más datos del usuario si están disponibles
+          if (res.user) {
+            localStorage.setItem('userData', JSON.stringify(res.user));
+          }
 
-          alert('Login correcto');
+          this.router.navigate(['/']);
+          
         }
       },
       error: () => {
-          alert('Login  incorrecto');
-
+        alert('Login incorrecto');
       }
     });
   }
@@ -46,6 +52,4 @@ export class LoginComponent {
   goToRegister(){
     this.router.navigate(['/register']);
   }
-
-
 }

@@ -1,30 +1,53 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   
   isLoggedIn = false;
   username = '';
   isMenuOpen = false;
+  private authSubscription!: Subscription;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-    // Verificar si el usuario está logueado (esto lo conectarás con tu servicio de autenticación)
+    // Suscribirse a los cambios de autenticación
+    this.authSubscription = this.authService.isAuthenticated$.subscribe(
+      (isAuth) => {
+        this.isLoggedIn = isAuth;
+        if (isAuth) {
+          this.username = this.authService.getUsername();
+        } else {
+          this.username = '';
+        }
+      }
+    );
+
+    // Verificar estado inicial
     this.checkAuthStatus();
   }
 
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
+
   checkAuthStatus() {
-    // Por ahora simulamos que el usuario está logueado
-    // Luego esto se conectará con tu servicio de autenticación
-    const token = localStorage.getItem('authToken');
-    this.isLoggedIn = !!token;
-    this.username = localStorage.getItem('username') || 'Usuario';
+    this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.username = this.authService.getUsername();
+    }
   }
 
   toggleMenu() {
@@ -47,10 +70,16 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/admin']);
   }
 
+  navigateToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
+  navigateToOrders() {
+    this.router.navigate(['/orders']);
+  }
+
   logout() {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('username');
-    this.isLoggedIn = false;
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }
