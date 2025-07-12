@@ -13,6 +13,7 @@ import { ViewClientProductsModule } from './components/view-client-products/view
 import { ClientPayComponent } from './components/client-pay/client-pay.component';
 import { ClientPayModule } from './components/client-pay/client-pay.module';
 import { SidebarBodegaComponent } from './components/sidebar-bodega/sidebar-bodega.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [

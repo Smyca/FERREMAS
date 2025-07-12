@@ -1,5 +1,3 @@
-
-
 * {
   margin: 0;
   padding: 0;
@@ -9,7 +7,7 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #132059 0%, #322044 100%);
-  min-height: 100vh;
+  min-height: 120vh;
 }
 
 .container {
@@ -40,7 +38,7 @@ body {
   font-size: 1.1rem;
 }
 
-/* Estilo login */
+/* Estilo registro */
 
 .wrapper{
     width: 400px;
@@ -51,13 +49,11 @@ body {
     margin: auto;
     color: white;
     border-radius: 10px;
-
 }
 
 form{
     padding: 20px;
 }
-
 
 .wrapper h1{
     font-size: 36px;
@@ -69,7 +65,6 @@ form{
     height: 50px;
     margin: 30px 0;
     position: relative;
-
 }
 
 .input-box input{
@@ -84,15 +79,12 @@ form{
     color: white;
     padding: 20px 45px 20px 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-
 }
 
 .input-box input:hover{
     transform: translateY(-3px);
-
     box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.2);
 }
-
 
 .input-box input::placeholder{
     color: white;
@@ -106,31 +98,27 @@ form{
     font-size: 22px;
 }
 
-.remember-forgot{
+.terms-conditions{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     font-size: 14.5px;
     margin: -15px 8px 15px;
 }
 
-.remember-forgot label input{
+.terms-conditions label input{
     accent-color: #fff;
     margin-right: 3px;
 }
 
-
-.remember-forgot a {
+.terms-conditions a {
     color: #fff;
     text-decoration: none;
-
+    margin-left: 5px;
 }
 
-
-.remember-forgot a:hover {
+.terms-conditions a:hover {
     text-decoration: underline;
-    
 }
-
 
 .wrapper .btn{
     width: 100%;
@@ -144,43 +132,25 @@ form{
     font-size: 16px;
     color: #333;
     font-weight: 600; 
-
-    
 }
 
-
-
-.wrapper .register-link{
+.wrapper .login-link{
     font-size: 14.5px;
     text-align: center;
     margin-top: 20px;
     margin: 20px 0 15px;
-
 }
-.register-link p a {
+
+.login-link p a {
     color: #fff;
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-
 }
 
-
-
-.register-link p a:hover {
+.login-link p a:hover {
     text-decoration: underline;
 }
-
-
-
-
-
-
-
-
-
-
-/* ------------------------ */
 
 @media (max-width: 768px) {
   .container {
@@ -191,20 +161,8 @@ form{
     font-size: 2rem;
   }
 
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .button-group {
-    justify-content: center;
-  }
-
-  .search-container {
-    flex-direction: column;
-  }
-
-  .search-input {
-    min-width: 100%;
+  .wrapper {
+    width: 90%;
+    max-width: 400px;
   }
 }
-

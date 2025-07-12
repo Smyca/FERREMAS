@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
-  {path:'',redirectTo:'login',pathMatch:'full'},
+  
   {
-    path:'view-client-products', 
+    path:'', 
     loadChildren: () => import('./components/view-client-products/view-client-products.module').then(m => m.ViewClientProductsModule)
   },
   {
@@ -14,7 +14,8 @@ const routes: Routes = [
   },
   { path: 'view-vendor', loadChildren: () => import('./components/view-vendor/view-vendor.module').then(m => m.ViewVendorModule) },
   { path: 'client-pay', loadChildren: () => import('./components/client-pay/client-pay.module').then(m => m.ClientPayModule) },
-  { path: 'view-bodega', loadChildren: () => import('./components/view-bodega/view-bodega.module').then(m => m.ViewBodegaModule) }
+  { path: 'view-bodega', loadChildren: () => import('./components/view-bodega/view-bodega.module').then(m => m.ViewBodegaModule) },
+  { path: 'register', loadChildren: () => import('./components/register/register.module').then(m => m.RegisterModule) }
 ];
 
 @NgModule({

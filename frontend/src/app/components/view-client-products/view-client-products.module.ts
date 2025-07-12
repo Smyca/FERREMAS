@@ -4,6 +4,7 @@ import { ViewClientProductsComponent } from './view-client-products.component';
 import { FormsModule } from '@angular/forms';
 import { ViewClientProductsRoutingModule } from './view-client-products-routing.module';
 import { ProductoService } from '../../services/producto.service';
+import { NavbarModule } from '../navbar/navbar.module';
 
 
 
@@ -12,7 +13,8 @@ import { ProductoService } from '../../services/producto.service';
   imports: [
     CommonModule,
     FormsModule,
-    ViewClientProductsRoutingModule
+    ViewClientProductsRoutingModule,
+    NavbarModule
   ],
   exports: [ViewClientProductsComponent],
   providers: [ProductoService]

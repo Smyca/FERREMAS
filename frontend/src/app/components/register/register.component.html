@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FERREMAS - Registro</title>
+  <link rel="stylesheet" href="register.component.css">
+  <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🔧 FERREMAS</h1>
+      <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
+    </div>
+
+    <div class="wrapper">
+      <form (ngSubmit)="onRegister()">
+        <h1>Registro</h1>
+        
+        <div class="input-box">
+            <input type="text" [(ngModel)]="username" name="username" placeholder="Usuario" required>
+            <i class='bx bx-user'></i> 
+        </div>
+
+        <div class="input-box">
+            <input type="email" [(ngModel)]="email" name="email" placeholder="Correo electrónico" required>
+            <i class='bx bx-envelope'></i> 
+        </div>
+        
+        <div class="input-box">
+            <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" required>
+            <i class='bx bx-lock'></i> 
+        </div>
+
+        <div class="input-box">
+            <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirmar contraseña" required>
+            <i class='bx bx-lock-alt'></i> 
+        </div>
+
+        <div class="terms-conditions">
+            <label>
+                <input type="checkbox" required>
+                Acepto los <a href="#">términos y condiciones</a>
+            </label>
+        </div>
+
+        <button type="submit" class="btn">Registrarse</button>
+        
+        <div class="login-link">
+            <p>¿Ya tienes una cuenta? <a (click)="goToLogin()">Iniciar sesión</a></p>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
