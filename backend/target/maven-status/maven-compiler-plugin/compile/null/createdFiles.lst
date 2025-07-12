@@ -1,6 +1,6 @@
-Model/Usuario$.class
-Controller/UserResource$LoginRequest.class
-Repository/UsuarioRepository.class
-Model/Usuario.class
-Controller/UserResource.class
-Controller/UserResource$LoginResponse.class
+Repository\UsuarioRepository.class
+Controller\UserResource.class
+Controller\UserResource$LoginResponse.class
+Model\Usuario.class
+Model\Usuario$.class
+Controller\UserResource$LoginRequest.class

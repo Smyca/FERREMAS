@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { ProductoModule } from './components/producto/producto.module';
 import { LoginModule } from './components/login/login.module';
 import { ViewClientProductsComponent } from './components/view-client-products/view-client-products.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ViewClientProductsModule } from './components/view-client-products/view-client-products.module';
 import { ClientPayComponent } from './components/client-pay/client-pay.component';
 import { ClientPayModule } from './components/client-pay/client-pay.module';
@@ -28,6 +28,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     HttpClientModule,
     LoginModule,
     FormsModule,
+    ReactiveFormsModule,
     ClientPayModule
   ],
   providers: [

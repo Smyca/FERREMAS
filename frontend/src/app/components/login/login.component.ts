@@ -1,13 +1,7 @@
-import {
-  Component
-} from '@angular/core';
-import {
-  Router
-} from '@angular/router';
-
-import {
-  AuthService
-} from '../../services/auth.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,38 +9,44 @@ import {
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-
-  username = '';
-  password = '';
+  loginForm: FormGroup;
   errorMsg = '';
   
-
-  constructor(private router: Router,
-    private authService: AuthService
-  ) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private fb: FormBuilder
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
 
   onLogin() {
-    this.authService.login(this.username, this.password).subscribe({
-      next: (res) => {
-        if (res.success) {
-          // Guardar información del usuario en localStorage
-          localStorage.setItem('authToken', res.token || 'dummy-token');
-          localStorage.setItem('username', this.username);
-          localStorage.setItem('isLoggedIn', 'true');
-          
-          // Opcional: guardar más datos del usuario si están disponibles
-          if (res.user) {
-            localStorage.setItem('userData', JSON.stringify(res.user));
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          if (response.success) {
+            // Guardar datos en localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userData', JSON.stringify({ email }));
+            
+            // Obtener la ruta de redirección correcta
+            const redirectRoute = this.authService.getUserRedirectRoute();
+            
+            // Navegar a la ruta correspondiente
+            this.router.navigate([redirectRoute]);
           }
-
-          this.router.navigate(['/']);
-          
+        },
+        error: (error) => {
+          console.error('Error en login:', error);
+          this.errorMsg = 'Error de autenticación';
         }
-      },
-      error: () => {
-        alert('Login incorrecto');
-      }
-    });
+      });
+    }
   }
 
   goToRegister(){

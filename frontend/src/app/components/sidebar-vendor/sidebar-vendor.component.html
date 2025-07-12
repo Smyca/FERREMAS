@@ -39,6 +39,23 @@
       </li>
 
     }
-  </div>
 
+    <!-- Botón de logout siguiendo el mismo patrón -->
+    <li class="sidenav-nav-item">
+      <button 
+        class="sidenav-nav-link logout-btn"
+        (click)="logout()"
+      >
+        <i 
+          class="sidenav-link-icon fal fa-sign-out-alt"
+        ></i>
+        @if(!isLeftSidebarCollapsed()){
+          <span class="sidenav-link-text">
+            Cerrar Sesión
+          </span>
+        }
+      </button>
+    </li>
+
+  </div>
 </div>

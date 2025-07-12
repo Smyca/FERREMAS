@@ -1,7 +1,5 @@
 package Controller;
 
-
-
 import Repository.UsuarioRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -14,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 public class UserResource {
 
     public static class LoginRequest {
-        public String username;
+        public String email;
         public String password;
     }
 
@@ -28,7 +26,7 @@ public class UserResource {
 
     @POST
     public Response login(LoginRequest request) {
-        var usuario = usuarioRepository.findByUsernameAndPassword(request.username, request.password);
+        var usuario = usuarioRepository.findByEmailAndPassword(request.email, request.password);
         LoginResponse resp = new LoginResponse();
         if (usuario != null) {
             resp.success = true;

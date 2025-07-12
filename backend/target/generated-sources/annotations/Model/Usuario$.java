@@ -31,6 +31,15 @@ public final class Usuario$ {
         false
     );
     /**
+     * This Field corresponds to the {@link Usuario} field "email".
+     */
+    public static final StringField<Usuario> email = StringField.create(
+        Usuario.class,
+        "email",
+        usuario -> usuario.email,
+        true
+    );
+    /**
      * This Field corresponds to the {@link Usuario} field "username".
      */
     public static final StringField<Usuario> username = StringField.create(

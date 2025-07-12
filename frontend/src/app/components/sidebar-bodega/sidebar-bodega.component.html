@@ -5,7 +5,7 @@
     </button>
     @if(!isLeftSidebarCollapsed()){
 
-      <div class="logo-text">Bodeguero</div>
+      <div class="logo-text">Bodega</div>
       <button class="btn-close" (click)="closeSidenav()">
           <i class="fal fa-times close-icon"></i>
       </button>
@@ -39,6 +39,23 @@
       </li>
 
     }
-  </div>
 
+    <!-- Botón de logout -->
+    <li class="sidenav-nav-item">
+      <button 
+        class="sidenav-nav-link logout-btn"
+        (click)="logout()"
+      >
+        <i 
+          class="sidenav-link-icon fal fa-sign-out-alt"
+        ></i>
+        @if(!isLeftSidebarCollapsed()){
+          <span class="sidenav-link-text">
+            Cerrar Sesión
+          </span>
+        }
+      </button>
+    </li>
+
+  </div>
 </div>
