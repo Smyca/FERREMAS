@@ -63,6 +63,16 @@
                 {{ getStockText(product.stock) }}
               </div>
             </div>
+            
+            <!-- Imagen del producto -->
+            <div class="product-image">
+              <img 
+                [src]="product.imagenUrl || 'assets/images/no-image.png'" 
+                [alt]="product.nombre"
+                (error)="onImageError($event)"
+                loading="lazy">
+            </div>
+            
             <div class="product-name">{{ product.nombre }}</div>
             <div class="product-brand">📦 {{ product.marca }}</div>
             <div class="product-category">{{ product.categoria }}</div>
@@ -130,6 +140,12 @@
           <label for="stock">Stock</label>
           <input type="number" id="stock" name="stock"
                  [(ngModel)]="productoSeleccionado.stock" required>
+        </div>
+        <div class="form-group">
+          <label for="imagenUrl">URL de la Imagen</label>
+          <input type="url" id="imagenUrl" name="imagenUrl" 
+                 [(ngModel)]="productoSeleccionado.imagenUrl"
+                 placeholder="https://ejemplo.com/imagen.jpg">
         </div>
         <div class="button-group">
           <button type="submit" class="btn btn-success">💾 Guardar</button>

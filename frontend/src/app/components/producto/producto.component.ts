@@ -129,7 +129,8 @@ export class ProductoComponent implements OnInit, AfterViewInit {
       marca: this.productoSeleccionado.marca,
       categoria: this.productoSeleccionado.categoria,
       precio: Number(this.productoSeleccionado.precio),
-      stock: Number(this.productoSeleccionado.stock)
+      stock: Number(this.productoSeleccionado.stock),
+      imagenUrl: this.productoSeleccionado.imagenUrl || ''  // Agregar esta línea
     };
 
     console.log('Operación:', this.modalTitle);
@@ -205,6 +206,7 @@ export class ProductoComponent implements OnInit, AfterViewInit {
       categoria: '',
       precio: 0,
       stock: 0,
+      imagenUrl: ''  // Agregar esta línea
     };
   }
 
@@ -330,5 +332,9 @@ export class ProductoComponent implements OnInit, AfterViewInit {
     // Actualizar productos filtrados
     this.productosFiltrados = results;
     console.log('Productos filtrados:', this.productosFiltrados.length);
+  }
+
+  onImageError(event: any) {
+    event.target.src = 'assets/images/no-image.png';
   }
 }

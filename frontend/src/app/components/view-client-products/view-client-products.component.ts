@@ -501,4 +501,8 @@ export class ViewClientProductsComponent implements OnInit, AfterViewInit {
       }, 300);
     }, 3000);
   }
+
+  onImageError(event: any) {
+    event.target.src = 'https://via.placeholder.com/200x200/f8f9fa/6c757d?text=Sin+Imagen';
+  }
 }
