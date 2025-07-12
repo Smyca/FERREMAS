@@ -105,6 +105,16 @@
               {{ getStockText(product.stock) }}
             </div>
           </div>
+          
+          <!-- Imagen del producto -->
+          <div class="product-image">
+            <img 
+              [src]="product.imagenUrl || 'assets/images/no-image.png'" 
+              [alt]="product.nombre"
+              (error)="onImageError($event)"
+              loading="lazy">
+          </div>
+          
           <div class="product-name">{{ product.nombre }}</div>
           <div class="product-brand">📦 {{ product.marca }}</div>
           <div class="product-category">{{ product.categoria }}</div>

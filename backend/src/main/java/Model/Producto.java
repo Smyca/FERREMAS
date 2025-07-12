@@ -24,6 +24,9 @@ public class Producto {
 
     private int stock;
 
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
@@ -86,6 +89,14 @@ public class Producto {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public String getImagenUrl() {
+        return imagenUrl;
+    }
+
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public LocalDateTime getFechaCreacion() {

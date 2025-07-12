@@ -66,9 +66,8 @@ public class ProductResource {
         producto.setCategoria(productoActualizado.getCategoria());
         producto.setPrecio(productoActualizado.getPrecio());
         producto.setStock(productoActualizado.getStock());
+        producto.setImagenUrl(productoActualizado.getImagenUrl());
         producto.setFechaActualizacion(productoActualizado.getFechaActualizacion());
-
-        // Se guardará automáticamente si el entity manager está activo
 
         return Response.ok(producto).build();
     }

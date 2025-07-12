@@ -10,6 +10,7 @@ export interface Producto {
   categoria: string;
   precio: number;
   stock: number;
+  imagenUrl?: string;  // Agregar esta línea
   fechaCreacion?: string;
   fechaActualizacion?: string;
 }

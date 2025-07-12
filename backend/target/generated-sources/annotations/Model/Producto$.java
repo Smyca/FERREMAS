@@ -17,12 +17,21 @@ import java.time.LocalDateTime;
 public final class Producto$ {
     
     /**
-     * This Field corresponds to the {@link Producto} field "marca".
+     * This Field corresponds to the {@link Producto} field "nombre".
      */
-    public static final StringField<Producto> marca = StringField.create(
+    public static final StringField<Producto> nombre = StringField.create(
         Producto.class,
-        "marca",
-        Producto::getMarca,
+        "nombre",
+        Producto::getNombre,
+        false
+    );
+    /**
+     * This Field corresponds to the {@link Producto} field "codigoProducto".
+     */
+    public static final StringField<Producto> codigoProducto = StringField.create(
+        Producto.class,
+        "codigoProducto",
+        Producto::getCodigoProducto,
         false
     );
     /**
@@ -35,21 +44,30 @@ public final class Producto$ {
         false
     );
     /**
-     * This Field corresponds to the {@link Producto} field "nombre".
+     * This Field corresponds to the {@link Producto} field "imagenUrl".
      */
-    public static final StringField<Producto> nombre = StringField.create(
+    public static final StringField<Producto> imagenUrl = StringField.create(
         Producto.class,
-        "nombre",
-        Producto::getNombre,
+        "imagenUrl",
+        Producto::getImagenUrl,
         false
     );
     /**
-     * This Field corresponds to the {@link Producto} field "precio".
+     * This Field corresponds to the {@link Producto} field "stock".
      */
-    public static final ComparableField<Producto, BigDecimal> precio = ComparableField.create(
+    public static final IntField<Producto> stock = IntField.create(
         Producto.class,
-        "precio",
-        Producto::getPrecio,
+        "stock",
+        Producto::getStock,
+        false
+    );
+    /**
+     * This Field corresponds to the {@link Producto} field "fechaCreacion".
+     */
+    public static final ComparableField<Producto, LocalDateTime> fechaCreacion = ComparableField.create(
+        Producto.class,
+        "fechaCreacion",
+        Producto::getFechaCreacion,
         false
     );
     /**
@@ -72,30 +90,21 @@ public final class Producto$ {
         false
     );
     /**
-     * This Field corresponds to the {@link Producto} field "stock".
+     * This Field corresponds to the {@link Producto} field "marca".
      */
-    public static final IntField<Producto> stock = IntField.create(
+    public static final StringField<Producto> marca = StringField.create(
         Producto.class,
-        "stock",
-        Producto::getStock,
+        "marca",
+        Producto::getMarca,
         false
     );
     /**
-     * This Field corresponds to the {@link Producto} field "codigoProducto".
+     * This Field corresponds to the {@link Producto} field "precio".
      */
-    public static final StringField<Producto> codigoProducto = StringField.create(
+    public static final ComparableField<Producto, BigDecimal> precio = ComparableField.create(
         Producto.class,
-        "codigoProducto",
-        Producto::getCodigoProducto,
-        false
-    );
-    /**
-     * This Field corresponds to the {@link Producto} field "fechaCreacion".
-     */
-    public static final ComparableField<Producto, LocalDateTime> fechaCreacion = ComparableField.create(
-        Producto.class,
-        "fechaCreacion",
-        Producto::getFechaCreacion,
+        "precio",
+        Producto::getPrecio,
         false
     );
 }

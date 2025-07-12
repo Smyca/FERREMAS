@@ -618,6 +618,34 @@
   box-shadow: none;
 }
 
+.product-image {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-image img:hover {
+  transform: scale(1.05);
+}
+
+.product-image img[src*="no-image"] {
+  object-fit: contain;
+  opacity: 0.5;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .container {
