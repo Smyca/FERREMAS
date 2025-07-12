@@ -2,140 +2,129 @@
 <app-navbar></app-navbar>
 
 <div class="container">
-    <!-- Header actualizado con margin-top para el navbar fijo -->
-    <div class="header" style="margin-top: 90px;">
-      <h1>🔧 FERREMAS</h1>
-      <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
-    </div>
+  <!-- Header actualizado con margin-top para el navbar fijo -->
+  <div class="header" style="margin-top: 90px;">
+    <h1>🔧 FERREMAS</h1>
+    <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
+  </div>
 
-    <!-- Carrito Flotante -->
-    <div class="cart-floating" (click)="toggleCart()">
-      <div class="cart-icon">
-        🛒
-        <span class="cart-badge" *ngIf="getTotalItemsInCart() > 0">{{ getTotalItemsInCart() }}</span>
-      </div>
-    </div>
-
-    <!-- Modal del Carrito -->
-    <div class="cart-modal" [style.display]="cartModalVisible ? 'block' : 'none'">
-      <div class="cart-modal-content">
-        <div class="cart-header">
-          <h3>🛒 Carrito de Compras</h3>
-          <span class="close" (click)="toggleCart()">&times;</span>
-        </div>
-        <div class="cart-body">
-          <ng-container *ngIf="cartItems.length === 0">
-            <div class="empty-cart">
-              <p>Tu carrito está vacío</p>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="cartItems.length > 0">
-            <div *ngFor="let item of cartItems" class="cart-item">
-              <div class="cart-item-info">
-                <div class="cart-item-name">{{ item.nombre }}</div>
-                <div class="cart-item-price">{{ formatNumber(item.precio) }} {{ monedaSeleccionada }}</div>
-              </div>
-              <div class="cart-item-controls">
-                <button class="btn-small" (click)="decreaseQuantity(item)">-</button>
-                <span class="quantity">{{ item.quantity }}</span>
-                <button class="btn-small" (click)="increaseQuantity(item)">+</button>
-                <button class="btn-small btn-remove" (click)="removeFromCart(item)">🗑️</button>
-              </div>
-            </div>
-            <div class="cart-total">
-              <strong>Total: {{ formatNumber(getCartTotal()) }} {{ monedaSeleccionada }}</strong>
-            </div>
-            <div class="cart-actions">
-              <button class="btn btn-success" (click)="proceedToCheckout()">💳 Proceder al Pago</button>
-              <button class="btn btn-danger" (click)="clearCart()">🗑️ Vaciar Carrito</button>
-            </div>
-          </ng-container>
-        </div>
-      </div>
-    </div>
-
-    <!-- Controls -->
-    <div class="controls">
-      <div class="controls-header">
-          <div class="currency-selector">
-            <label for="moneda">💰 Mostrar precios en:</label>
-            <select id="moneda" [(ngModel)]="monedaSeleccionada" (change)="cambiarMoneda()" class="currency-select">
-              <option *ngFor="let m of monedasDisponibles" [value]="m">{{ m }}</option>
-            </select>
-          </div>
-        <div class="actions-section">
-         
-        </div>
-      </div>
-      
-      <div class="search-container">
-        
-        <input type="text" class="search-input" [(ngModel)]="searchTerm" 
-          (keyup)="searchProducts()"
-          placeholder="Buscar productos por nombre, marca o categoría...">
-        <select class="search-input" [(ngModel)]="selectedCategory" (change)="searchProducts()">
-          <option value="">Todas las categorías</option>
-          <option value="Herramientas Eléctricas">Herramientas Eléctricas</option>
-          <option value="Herramientas Manuales">Herramientas Manuales</option>
-          <option value="Materiales Básicos">Materiales Básicos</option>
-          <option value="Acabados">Acabados</option>
-          <option value="Equipos de Seguridad">Equipos de Seguridad</option>
-          <option value="Tornillos y Anclajes">Tornillos y Anclajes</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Products Container -->
-    <div class="products-container">
-      <div class="products-header">
-        <h3>Productos Disponibles</h3>
-      </div>
-      
-      <div id="productsGrid" class="products-grid">
-        <ng-container *ngIf="productosFiltrados.length === 0">
-          <div style="text-align: center; padding: 40px; color: #7f8c8d;">
-            No se encontraron productos
-          </div>
-        </ng-container>
-        
-        <ng-container *ngIf="productosFiltrados.length > 0">
-          <div *ngFor="let product of productosFiltrados" class="product-card">
-            <div class="product-header">
-              <div class="product-code">{{ product.codigoProducto }}</div>
-              <div [class]="'product-stock ' + getStockClass(product.stock)">
-                {{ getStockText(product.stock) }}
-              </div>
-            </div>
-            <div class="product-name">{{ product.nombre }}</div>
-            <div class="product-brand">📦 {{ product.marca }}</div>
-            <div class="product-category">{{ product.categoria }}</div>
-            <div class="product-description">{{ product.descripcion || 'Sin descripción' }}</div>
-            <div class="product-footer">
-              <div class="product-price">
-                {{ formatNumber(product.precio) }} {{ monedaSeleccionada }}
-              </div>
-              <div class="add-to-cart-section">
-                <button 
-                  class="btn btn-primary add-to-cart-btn" 
-                  (click)="addToCart(product)"
-                  [disabled]="product.stock === 0">
-                  <span *ngIf="product.stock > 0">🛒 Agregar al Carrito</span>
-                  <span *ngIf="product.stock === 0">Sin Stock</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-
-    <!-- PayPal Button Container -->
-    <div class="paypal-button-container" style="margin: 20px auto; max-width: 500px; padding: 20px;">
-      <h3>Prueba de Pago con PayPal</h3>
-      <p>Monto de prueba: $10.00 USD</p>
-      <div #paypalElement></div>
+  <!-- Carrito Flotante -->
+  <div class="cart-floating" (click)="toggleCart()">
+    <div class="cart-icon">
+      🛒
+      <span class="cart-badge" *ngIf="getTotalItemsInCart() > 0">{{ getTotalItemsInCart() }}</span>
     </div>
   </div>
 
+  <!-- Modal del Carrito -->
+  <div class="cart-modal" [style.display]="cartModalVisible ? 'block' : 'none'">
+    <div class="cart-modal-content">
+      <div class="cart-header">
+        <h3>🛒 Carrito de Compras</h3>
+        <span class="close" (click)="toggleCart()">&times;</span>
+      </div>
+      <div class="cart-body">
+        <ng-container *ngIf="cartItems.length === 0">
+          <div class="empty-cart">
+            <p>Tu carrito está vacío</p>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="cartItems.length > 0">
+          <div *ngFor="let item of cartItems" class="cart-item">
+            <div class="cart-item-info">
+              <div class="cart-item-name">{{ item.nombre }}</div>
+              <div class="cart-item-price">{{ formatNumber(item.precio) }} {{ monedaSeleccionada }}</div>
+            </div>
+            <div class="cart-item-controls">
+              <button class="btn-small" (click)="decreaseQuantity(item)">-</button>
+              <span class="quantity">{{ item.quantity }}</span>
+              <button class="btn-small" (click)="increaseQuantity(item)">+</button>
+              <button class="btn-small btn-remove" (click)="removeFromCart(item)">🗑️</button>
+            </div>
+          </div>
+          <div class="cart-total">
+            <strong>Total: {{ formatNumber(getCartTotal()) }} {{ monedaSeleccionada }}</strong>
+          </div>
+          <div class="cart-actions">
+            <button class="btn btn-success" (click)="proceedToCheckout()">💳 Proceder al Pago</button>
+            <button class="btn btn-danger" (click)="clearCart()">🗑️ Vaciar Carrito</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
 
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-header">
+      <div class="currency-selector">
+        <label for="moneda">💰 Mostrar precios en:</label>
+        <select id="moneda" [(ngModel)]="monedaSeleccionada" (change)="cambiarMoneda()" class="currency-select">
+          <option *ngFor="let m of monedasDisponibles" [value]="m">{{ m }}</option>
+        </select>
+      </div>
+      <div class="actions-section">
+
+      </div>
+    </div>
+
+    <div class="search-container">
+
+      <input type="text" class="search-input" [(ngModel)]="searchTerm" (keyup)="searchProducts()"
+        placeholder="Buscar productos por nombre, marca o categoría...">
+      <select class="search-input" [(ngModel)]="selectedCategory" (change)="searchProducts()">
+        <option value="">Todas las categorías</option>
+        <option value="Herramientas Eléctricas">Herramientas Eléctricas</option>
+        <option value="Herramientas Manuales">Herramientas Manuales</option>
+        <option value="Materiales Básicos">Materiales Básicos</option>
+        <option value="Acabados">Acabados</option>
+        <option value="Equipos de Seguridad">Equipos de Seguridad</option>
+        <option value="Tornillos y Anclajes">Tornillos y Anclajes</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Products Container -->
+  <div class="products-container">
+    <div class="products-header">
+      <h3>Productos Disponibles</h3>
+    </div>
+    
+    <div id="productsGrid" class="products-grid">
+      <ng-container *ngIf="productosFiltrados.length === 0">
+        <div style="text-align: center; padding: 40px; color: #7f8c8d;">
+          No se encontraron productos
+        </div>
+      </ng-container>
+      
+      <ng-container *ngIf="productosFiltrados.length > 0">
+        <div *ngFor="let product of productosFiltrados" class="product-card">
+          <div class="product-header">
+            <div class="product-code">{{ product.codigoProducto }}</div>
+            <div [class]="'product-stock ' + getStockClass(product.stock)">
+              {{ getStockText(product.stock) }}
+            </div>
+          </div>
+          <div class="product-name">{{ product.nombre }}</div>
+          <div class="product-brand">📦 {{ product.marca }}</div>
+          <div class="product-category">{{ product.categoria }}</div>
+          <div class="product-description">{{ product.descripcion || 'Sin descripción' }}</div>
+          <div class="product-footer">
+            <div class="product-price">
+              {{ formatNumber(product.precio) }} {{ monedaSeleccionada }}
+            </div>
+            <div class="add-to-cart-section">
+              <button 
+                class="btn btn-primary add-to-cart-btn" 
+                (click)="addToCart(product)"
+                [disabled]="product.stock === 0">
+                <span *ngIf="product.stock > 0">🛒 Agregar al Carrito</span>
+                <span *ngIf="product.stock === 0">Sin Stock</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 

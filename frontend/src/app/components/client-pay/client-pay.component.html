@@ -1,8 +1,11 @@
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
 <div class="container">
   <!-- Header -->
-  <div class="header">
+  <div class="header" style="margin-top: 90px;">
     <h1>🔧 FERREMAS</h1>
-    <p>Sistema de Gestión de Productos de Ferretería y Construcción</p>
+    <p>Finalizar Compra</p>
   </div>
 
   <!-- Botón Volver -->
@@ -86,7 +89,7 @@
         <h3>💳 Método de Pago</h3>
         <div class="payment-methods">
           <label class="radio-option">
-            <input type="radio" name="payment" value="debit" [(ngModel)]="paymentMethod">
+            <input type="radio" name="payment" value="debit" [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange()">
             <span class="radio-custom"></span>
             <div class="option-content">
               <div class="option-title">💳 Tarjeta de Débito</div>
@@ -94,7 +97,7 @@
             </div>
           </label>
           <label class="radio-option">
-            <input type="radio" name="payment" value="credit" [(ngModel)]="paymentMethod">
+            <input type="radio" name="payment" value="credit" [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange()">
             <span class="radio-custom"></span>
             <div class="option-content">
               <div class="option-title">💳 Tarjeta de Crédito</div>
@@ -102,11 +105,19 @@
             </div>
           </label>
           <label class="radio-option">
-            <input type="radio" name="payment" value="transfer" [(ngModel)]="paymentMethod">
+            <input type="radio" name="payment" value="transfer" [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange()">
             <span class="radio-custom"></span>
             <div class="option-content">
               <div class="option-title">🏦 Transferencia Bancaria</div>
               <div class="option-description">Transferencia electrónica</div>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="payment" value="paypal" [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange()">
+            <span class="radio-custom"></span>
+            <div class="option-content">
+              <div class="option-title">🌍 PayPal</div>
+              <div class="option-description">Pago seguro internacional</div>
             </div>
           </label>
         </div>
@@ -163,6 +174,15 @@
         </div>
       </div>
 
+      <!-- PayPal Button Container -->
+      <div class="form-section" *ngIf="paymentMethod === 'paypal'">
+        <h3>🌍 Pago con PayPal</h3>
+        <div class="paypal-button-container">
+          <p class="paypal-info">Monto: ~${{ convertToUSD(getFinalTotal()).toFixed(2) }} USD</p>
+          <div #paypalElement class="paypal-button"></div>
+        </div>
+      </div>
+
       <!-- Total Final -->
       <div class="final-total">
         <div class="total-breakdown">
@@ -181,12 +201,20 @@
         </div>
       </div>
 
-      <!-- Botones de Acción -->
-      <div class="action-buttons">
+      <!-- Botones de Acción (solo para métodos que no sean PayPal) -->
+      <div class="action-buttons" *ngIf="paymentMethod !== 'paypal'">
         <button class="btn btn-success btn-large" (click)="processPayment()" 
                 [disabled]="!isFormValid()">
           🛒 Confirmar Pedido
         </button>
+        <button class="btn btn-secondary" (click)="goBack()">
+          Cancelar
+        </button>
+      </div>
+
+      <!-- Nota para PayPal -->
+      <div class="paypal-note" *ngIf="paymentMethod === 'paypal'">
+        <p>💡 Usa el botón de PayPal arriba para completar tu pago de forma segura</p>
         <button class="btn btn-secondary" (click)="goBack()">
           Cancelar
         </button>
